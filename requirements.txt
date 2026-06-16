@@ -1,31 +1,16 @@
 # Core Streamlit
-streamlit==1.37.1
+streamlit>=1.37
 
 # Document parsing
-pdfplumber==0.11.4
-python-docx==1.1.0
+pdfplumber>=0.11
+python-docx>=1.1
 
-# Audio transcription - using Groq Whisper (cloud) by default to avoid heavy local model
-# openai-whisper downloads 140MB+ model on cold start - not ideal for free cloud
-# Only needed if user selects "Local Whisper" in UI
-setuptools
-openai-whisper==20240930
+# Groq API (for LLM + Whisper transcription)
+groq>=0.13
 
-# ML dependencies (CPU-only torch for smaller size)
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.3.1
-transformers==4.41.2
-accelerate==0.31.0
-bitsandbytes==0.43.3
+# Audio processing (bundled ffmpeg)
+imageio-ffmpeg>=0.5
 
-# ML utilities
-xgboost==2.1.1
-scikit-learn==1.5.0
-pandas==2.2.2
-numpy==1.26.4
-
-# Groq API
-groq==0.13.0
-
-# Audio processing
-imageio-ffmpeg==0.6.0
+# Utilities
+numpy>=1.24
+pandas>=2.0

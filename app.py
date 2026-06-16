@@ -7,34 +7,7 @@ import json
 import tempfile
 import time
 import re
-import subprocess
 from datetime import datetime
-
-# Setup ffmpeg path globally for whisper
-try:
-    import imageio_ffmpeg
-    _ffmpeg_path = imageio_ffmpeg.get_ffmpeg_exe()
-    os.environ["PATH"] = os.path.dirname(_ffmpeg_path) + os.pathsep + os.environ.get("PATH", "")
-    os.environ["FFMPEG_PATH"] = _ffmpeg_path
-    # Monkey-patch whisper to use full ffmpeg path
-    import whisper.audio as whisper_audio
-    _original_load_audio = whisper_audio.load_audio
-    def _patched_load_audio(file, sr=16000):
-        cmd = [
-            _ffmpeg_path,
-            "-nostdin", "-threads", "0", "-i", file,
-            "-f", "s16le", "-ac", "1", "-acodec", "pcm_s16le",
-            "-ar", str(sr), "-"
-        ]
-        try:
-            out = subprocess.run(cmd, capture_output=True, check=True).stdout
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"Failed to load audio: {e.stderr.decode()}") from e
-        import numpy as np
-        return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
-    whisper_audio.load_audio = _patched_load_audio
-except Exception as _e:
-    print(f"ffmpeg setup warning: {_e}")
 
 try:
     from kaggle_hr_ai_model import SuperAIHR
@@ -49,8 +22,6 @@ try:
 except ImportError:
     LocalGroqHR = None
 
-import whisper
-
 st.set_page_config(page_title="AI HR Interviewer", page_icon="🤖", layout="wide", initial_sidebar_state="expanded")
 
 # Custom CSS for better UI
@@ -61,6 +32,7 @@ st.markdown("""
         border-radius: 8px;
         font-weight: 600;
         transition: all 0.2s;
+    }
     .stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
@@ -104,11 +76,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── Load Offline Whisper (cached, loads only once) ──
-@st.cache_resource
-def load_offline_whisper():
-    return whisper.load_model("base")
-
 # ── Sidebar: Configuration ──
 with st.sidebar:
     st.header("⚙️ Configuration")
@@ -126,7 +93,8 @@ with st.sidebar:
     
     st.divider()
     st.subheader("🎙️ Transcription")
-    audio_backend = st.selectbox("Transcription Engine", ["Local Whisper (Offline)", "Groq Whisper (Cloud)"], index=0)
+    st.info("Using Groq Whisper (Cloud) — Fast & Accurate")
+    audio_backend = "Groq Whisper (Cloud)"
 
 # ── Backend Connection ──
 if "current_backend" not in st.session_state or st.session_state.current_backend != backend_choice or st.session_state.get("last_groq_key") != groq_key:
@@ -182,35 +150,21 @@ def extract_resume_text(file):
     return text.strip()
 
 def transcribe_audio(audio_bytes, audio_backend_choice):
-    """Transcribe audio bytes. Falls back to Local Whisper if Groq fails."""
+    """Transcribe audio bytes using Groq Whisper (Cloud)."""
     tmp_path = os.path.join(tempfile.gettempdir(), "hr_interview_audio.wav")
     with open(tmp_path, "wb") as f:
         f.write(audio_bytes)
 
     transcript = ""
     
-    # Try primary method
     try:
-        if audio_backend_choice == "Groq Whisper (Cloud)":
-            ai = st.session_state.get("ai_hr")
-            if ai and hasattr(ai, "transcribe_audio"):
-                transcript = ai.transcribe_audio(tmp_path)
-            else:
-                raise Exception("Groq offline, falling back to Local Whisper")
+        ai = st.session_state.get("ai_hr")
+        if ai and hasattr(ai, "transcribe_audio"):
+            transcript = ai.transcribe_audio(tmp_path)
         else:
-            model = load_offline_whisper()
-            result = model.transcribe(tmp_path)
-            transcript = result["text"].strip()
+            st.error("Groq API not connected. Please check your API key.")
     except Exception as e:
-        # Fallback: always try Local Whisper if primary failed
-        if audio_backend_choice != "Local Whisper (Offline)":
-            st.warning(f"⚠️ Groq Whisper failed ({e}). Using Local Whisper as fallback...")
-        try:
-            model = load_offline_whisper()
-            result = model.transcribe(tmp_path)
-            transcript = result["text"].strip()
-        except Exception as e2:
-            st.error(f"Transcription failed: {e2}")
+        st.error(f"Transcription failed: {e}")
     finally:
         try: os.remove(tmp_path)
         except: pass
@@ -644,7 +598,7 @@ with st.sidebar:
     - 🎯 Generates role-specific questions
     - ⏳ 30s think time before each question
     - 🎙️ 90s audio recording per answer
-    - 🔄 Auto-transcription (Whisper AI)
+    - 🔄 Auto-transcription (Groq Whisper)
     - 🤖 Real-time AI evaluation
     - 📊 Full report with verdict
     """)
@@ -654,4 +608,4 @@ with st.sidebar:
     if st.session_state.get("ai_hr"):
         st.success("✅ AI Connected")
     else:
-        st.warning("⚠️ AI Offline — Transcription still works via Local Whisper")
+        st.warning("⚠️ AI Offline — Add Groq API Key to enable")
