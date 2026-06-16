@@ -8,6 +8,7 @@ python-docx==1.1.0
 # Audio transcription - using Groq Whisper (cloud) by default to avoid heavy local model
 # openai-whisper downloads 140MB+ model on cold start - not ideal for free cloud
 # Only needed if user selects "Local Whisper" in UI
+setuptools
 openai-whisper==20240930
 
 # ML dependencies (CPU-only torch for smaller size)
