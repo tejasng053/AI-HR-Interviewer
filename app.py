@@ -940,24 +940,24 @@ if state["stage"] == "upload":
     col_start = st.columns([1, 2, 1])
     with col_start[1]:
         if st.button("🚀  Start Audio Interview", type="primary", use_container_width=True, disabled=not (resume_file and job_role)):
-        with st.spinner("Parsing resume..."):
-            state["resume_text"] = extract_resume_text(resume_file)
-            state["job_role"] = job_role
-            state["job_description"] = job_description or f"Standard {job_role} position"
-            state["num_questions"] = num_questions
-            state["difficulty"] = difficulty
-            state["q_types"] = ", ".join(q_types) if q_types else "Technical, Behavioral, Situational"
-        with st.spinner("Generating tailored interview questions..."):
-            state["questions"] = generate_questions(
-                state["resume_text"], job_role, state["job_description"],
-                num_questions, difficulty, state["q_types"])
-            state["stage"] = "interview"
-            state["current_q"] = 0
-            state["answers"] = []
-            state["evaluations"] = []
-            state["question_phase"] = "ready"
-            state["audio_bytes"] = None
-        st.rerun()
+            with st.spinner("Parsing resume..."):
+                state["resume_text"] = extract_resume_text(resume_file)
+                state["job_role"] = job_role
+                state["job_description"] = job_description or f"Standard {job_role} position"
+                state["num_questions"] = num_questions
+                state["difficulty"] = difficulty
+                state["q_types"] = ", ".join(q_types) if q_types else "Technical, Behavioral, Situational"
+            with st.spinner("Generating tailored interview questions..."):
+                state["questions"] = generate_questions(
+                    state["resume_text"], job_role, state["job_description"],
+                    num_questions, difficulty, state["q_types"])
+                state["stage"] = "interview"
+                state["current_q"] = 0
+                state["answers"] = []
+                state["evaluations"] = []
+                state["question_phase"] = "ready"
+                state["audio_bytes"] = None
+            st.rerun()
 
 # ── STAGE 2: Audio Interview ──
 elif state["stage"] == "interview":
