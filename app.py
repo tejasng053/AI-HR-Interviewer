@@ -447,8 +447,8 @@ div[data-testid="stMetricValue"] {
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
-    background: var(--surface) !important;
-    border-right: 1px solid var(--border) !important;
+    background: linear-gradient(180deg, #0d1117 0%, #111827 100%) !important;
+    border-right: 1px solid rgba(255,255,255,0.04) !important;
 }
 
 section[data-testid="stSidebar"] .stSelectbox > div > div {
@@ -459,6 +459,17 @@ section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3 {
     color: var(--primary-fixed-dim) !important;
+    font-size: 16px !important;
+    letter-spacing: -0.01em !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stMarkdown"] p {
+    font-size: 13px !important;
+    color: var(--on-surface-variant) !important;
+}
+
+section[data-testid="stSidebar"] .stDivider {
+    border-color: rgba(255,255,255,0.04) !important;
 }
 
 /* Dividers */
@@ -496,6 +507,15 @@ hr {
 
 # ── Sidebar: Configuration ──
 with st.sidebar:
+    st.markdown("""
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.06);">
+        <div style="width:36px; height:36px; border-radius:8px; background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%); display:flex; align-items:center; justify-content:center; font-size:16px;">⚡</div>
+        <div>
+            <div style="font-size:16px; font-weight:700; color:#dfe2ef;">Enterprise Portal</div>
+            <div style="font-size:11px; color:#8c909f; letter-spacing:0.03em;">HR Admin View</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     st.header("⚙️ Configuration")
     groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...")
     
@@ -845,8 +865,33 @@ def render_recording_waveform():
 # MAIN UI
 # ══════════════════════════════════════════
 st.markdown("""
-<div style="text-align:center; padding: var(--space-10) 0 var(--space-6);">
-    <h1 class="font-display" style="background: linear-gradient(135deg, var(--primary-fixed-dim) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: var(--space-3);">AI HR Interviewer</h1>
+<div style="
+    background: linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(15,19,28,0.98) 100%);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: var(--space-4) var(--space-8);
+    margin: -1rem -1rem var(--space-8) -1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+">
+    <div style="display:flex; align-items:center; gap:var(--space-3);">
+        <div style="width:40px; height:40px; border-radius:var(--radius-lg); background:linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%); display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow: var(--shadow-glow-primary);">🤖</div>
+        <div>
+            <div style="font-size:20px; font-weight:700; color:var(--primary-fixed-dim); letter-spacing:-0.01em;">HireFlow AI</div>
+            <div style="font-size:11px; color:var(--outline); letter-spacing:0.05em; text-transform:uppercase;">Enterprise Interviewer</div>
+        </div>
+    </div>
+    <div style="display:flex; gap:var(--space-6); align-items:center;">
+        <span style="font-size:13px; color:var(--on-surface-variant); font-weight:500; padding:var(--space-1) var(--space-3); border-bottom:2px solid var(--primary);">Dashboard</span>
+        <span style="font-size:13px; color:var(--outline); font-weight:500; padding:var(--space-1) var(--space-3);">Interviews</span>
+        <span style="font-size:13px; color:var(--outline); font-weight:500; padding:var(--space-1) var(--space-3);">Reports</span>
+    </div>
+</div>
+<div style="text-align:center; padding: var(--space-6) 0 var(--space-8);">
+    <h1 class="font-display" style="background: linear-gradient(135deg, var(--primary-fixed-dim) 0%, var(--primary) 50%, var(--primary-fixed) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: var(--space-3); font-size:42px;">AI HR Interviewer</h1>
     <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Conduct structured, AI-evaluated audio interviews with multi-dimensional scoring</p>
 </div>
 """, unsafe_allow_html=True)
@@ -1140,37 +1185,57 @@ elif state["stage"] == "results":
     # Header metrics with radar
     m1, m2, m3 = st.columns([1, 1, 2])
     with m1:
+        score_color = "#22c55e" if score >= 70 else "#fbbf24" if score >= 50 else "#ef4444"
         st.markdown(f"""
-        <div class="glass-card" style="text-align:center; padding: var(--space-6);">
-            <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">OVERALL SCORE</div>
-            <div class="font-display" style="color: var(--on-surface); font-size: 48px; font-family: var(--font-mono);">{score}</div>
-            <div style="color: var(--on-surface-variant); font-size: 14px;">/ 100</div>
+        <div style="background:rgba(17,24,39,0.6); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.05); border-radius:12px; text-align:center; padding:32px 24px;">
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#fbbf24; margin-bottom:12px;">OVERALL SCORE</div>
+            <div style="width:80px; height:80px; border-radius:50%; border:3px solid {score_color}; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; box-shadow:0 0 20px {score_color}30;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:700; color:{score_color};">{score}</span>
+            </div>
+            <div style="color:#8c909f; font-size:12px;">/ 100</div>
         </div>
         """, unsafe_allow_html=True)
     with m2:
         verdict_colors = {"Strong Hire": "#22c55e", "Hire": "#22c55e", "Consider": "#fbbf24", "No Hire": "#ef4444"}
         vc = verdict_colors.get(verdict, "#94a3b8")
         st.markdown(f"""
-        <div class="glass-card" style="text-align:center; padding: var(--space-6); display:flex; align-items:center; justify-content:center;">
-            <div style="background: {vc}20; border: 1px solid {vc}40; color: {vc}; padding: var(--space-3) var(--space-6); border-radius: var(--radius-full); font-weight: 600; font-size: 16px;">{verdict}</div>
+        <div style="background:rgba(17,24,39,0.6); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.05); border-radius:12px; text-align:center; padding:32px 24px; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%;">
+            <div style="font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#8c909f; margin-bottom:12px;">AI RECOMMENDATION</div>
+            <div style="background:{vc}15; border:1px solid {vc}40; color:{vc}; padding:8px 24px; border-radius:999px; font-weight:700; font-size:18px; letter-spacing:-0.01em;">{verdict}</div>
         </div>
         """, unsafe_allow_html=True)
     with m3:
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-    st.divider()
-    st.subheader("📋 Executive Summary")
-    st.write(report.get("summary", "No summary available"))
+    st.markdown("""
+    <div style="height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); margin:24px 0;"></div>
+    """, unsafe_allow_html=True)
+    
+    # Executive Summary
+    st.markdown(f"""
+    <div style="background:rgba(17,24,39,0.6); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.05); border-radius:12px; padding:24px; margin-bottom:20px;">
+        <div style="font-size:18px; font-weight:600; color:#dfe2ef; margin-bottom:12px;">📋 Executive Summary</div>
+        <div style="font-size:14px; color:#c2c6d6; line-height:1.7;">{report.get("summary", "No summary available")}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("✅ Key Strengths")
-        for s in report.get("key_strengths", []):
-            st.write(f"• {s}")
+        strengths_html = "".join([f'<div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px;"><span style="color:#22c55e; font-size:14px;">✓</span><span style="font-size:13px; color:#c2c6d6;">{s}</span></div>' for s in report.get("key_strengths", [])])
+        st.markdown(f"""
+        <div style="background:rgba(17,24,39,0.6); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.05); border-left:3px solid #22c55e; border-radius:12px; padding:24px;">
+            <div style="font-size:16px; font-weight:600; color:#22c55e; margin-bottom:16px;">👍 Key Strengths</div>
+            {strengths_html}
+        </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.subheader("⚠️ Areas for Improvement")
-        for g in report.get("key_gaps", []):
-            st.write(f"• {g}")
+        gaps_html = "".join([f'<div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:8px;"><span style="color:#fbbf24; font-size:14px;">↗</span><span style="font-size:13px; color:#c2c6d6;">{g}</span></div>' for g in report.get("key_gaps", [])])
+        st.markdown(f"""
+        <div style="background:rgba(17,24,39,0.6); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.05); border-left:3px solid #fbbf24; border-radius:12px; padding:24px;">
+            <div style="font-size:16px; font-weight:600; color:#fbbf24; margin-bottom:16px;">↗ Areas for Probe</div>
+            {gaps_html}
+        </div>
+        """, unsafe_allow_html=True)
 
     st.subheader("📝 Detailed Feedback")
     st.write(report.get("detailed_feedback", "N/A"))
@@ -1230,16 +1295,18 @@ NEXT STEPS:\n{report.get('next_steps','')}
 # ── Sidebar Info ──
 with st.sidebar:
     st.header("ℹ️ About")
-    st.write("""
-    **Audio-First AI Interviewer:**
-    - 📄 Parses resume (PDF/DOCX)
-    - 🎯 Generates role-specific questions
-    - ⏳ 30s think time before each question
-    - 🎙️ 90s audio recording per answer
-    - 🔄 Auto-transcription (Groq Whisper)
-    - 🤖 Real-time AI evaluation
-    - 📊 Full report with verdict
-    """)
+    st.markdown("""
+    <div style="font-size:13px; color:var(--on-surface-variant); line-height:1.7;">
+    <strong style="color:var(--on-surface);">Audio-First AI Interviewer</strong><br>
+    📄 Resume parsing (PDF/DOCX)<br>
+    🎯 Role-specific question generation<br>
+    ⏳ 30s think time per question<br>
+    🎙️ 90s audio recording per answer<br>
+    🔄 Auto-transcription via Groq Whisper<br>
+    🤖 Real-time AI evaluation<br>
+    📊 Comprehensive report with verdict
+    </div>
+    """, unsafe_allow_html=True)
     st.divider()
     backend = st.session_state.get("current_backend", "None")
     st.caption(f"Backend: {backend}")
@@ -1247,3 +1314,10 @@ with st.sidebar:
         st.success("✅ AI Connected")
     else:
         st.warning("⚠️ AI Offline — Add Groq API Key to enable")
+    
+    st.markdown("""
+    <div style="position:fixed; bottom:16px; left:16px; display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--outline);">
+        <span>🛟 Support</span>
+        <span>🚪 Logout</span>
+    </div>
+    """, unsafe_allow_html=True)

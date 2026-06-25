@@ -12,9 +12,8 @@ serverAddress = ""
 serverPort = 443
 
 [theme]
-primaryColor = "#667eea"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f8fafc"
-textColor = "#1e293b"
+primaryColor = "#3b82f6"
+backgroundColor = "#0a0e17"
+secondaryBackgroundColor = "#111827"
+textColor = "#dfe2ef"
 font = "sans serif"
-
