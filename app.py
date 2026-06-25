@@ -690,12 +690,19 @@ def evaluate_answer(question, answer, resume):
     default = {"score": 5, "feedback": "Evaluation unavailable", "strengths": [], "improvements": [], "technical_accuracy": "medium", "communication": "medium"}
     if not st.session_state.get("ai_hr") or not answer.strip():
         return default
-    prompt = f"""Evaluate this interview answer. Be thorough but fair.
+    prompt = f"""You are a strict, objective technical interviewer. Your task is to evaluate the candidate's answer to the question provided.
+
 Question: {question}
-Candidate Answer: {answer}
+Candidate Answer: "{answer}"
 Candidate Background: {resume[:2000]}
 
-Return ONLY valid JSON: {{"score": <1-10>, "feedback": "detailed evaluation", "strengths": ["s1", "s2"], "improvements": ["i1", "i2"], "technical_accuracy": "high/medium/low", "communication": "high/medium/low"}}"""
+CRITICAL RULES:
+1. ONLY evaluate the "Candidate Answer". The "Candidate Background" is provided strictly for context (e.g., to understand acronyms they might use). DO NOT give them points just for having a good resume.
+2. If the "Candidate Answer" is empty, extremely short (e.g., "you", "hello", "skip"), gibberish, or fails to address the question, you MUST give a score of 0 or 1.
+3. If the candidate says "I don't know" or avoids the technical core of the question, the score MUST be low (1-3).
+4. Be rigorous. A score of 8-10 requires a detailed, technically accurate, and well-structured response.
+
+Return ONLY valid JSON: {{"score": <0-10>, "feedback": "detailed evaluation", "strengths": ["s1", "s2"], "improvements": ["i1", "i2"], "technical_accuracy": "high/medium/low/none", "communication": "high/medium/low/none"}}"""
     try:
         result = st.session_state.ai_hr.ask_ai(
             "You are an expert interviewer. Return ONLY valid JSON.", prompt)
@@ -721,12 +728,20 @@ def generate_final_report(state):
         f"Q: {q['question']}\nA: {a}\nScore: {e.get('score', 'N/A')}/10"
         for q, a, e in zip(state["questions"], state["answers"], state["evaluations"])
     ])
-    prompt = f"""Generate a comprehensive interview report for a {state['job_role']} candidate.
-Resume: {state['resume_text'][:2000]}
+    prompt = f"""You are a Senior HR Director conducting a final review of a candidate's interview performance for a {state['job_role']} position.
+
+Candidate Resume (Context Only):
+{state['resume_text'][:2000]}
+
 Interview Q&A:
 {qa_pairs}
 
-Return ONLY valid JSON: {{"overall_score": <0-100>, "verdict": "Strong Hire|Hire|Consider|No Hire", "summary": "executive summary", "key_strengths": ["s1","s2","s3"], "key_gaps": ["g1","g2","g3"], "detailed_feedback": "feedback", "recommended_resources": ["r1","r2","r3"], "next_steps": "next steps"}}"""
+CRITICAL RULES:
+1. Your final verdict and overall score MUST strictly reflect the interview performance in the Q&A above.
+2. Do NOT recommend a "Hire" or "Strong Hire" if the candidate skipped questions, gave one-word answers, or scored poorly on individual questions, regardless of how good their resume is.
+3. If the transcript shows the candidate failed to answer the questions properly (e.g., answers are just "you", "skip", or very short), the verdict MUST be "No Hire" and the score must reflect that failure (e.g., 0-30).
+
+Return ONLY valid JSON: {{"overall_score": <0-100>, "verdict": "Strong Hire|Hire|Consider|No Hire", "summary": "executive summary", "key_strengths": ["s1","s2"], "key_gaps": ["g1","g2"], "detailed_feedback": "feedback", "recommended_resources": ["r1"], "next_steps": "next steps"}}"""
     try:
         result = st.session_state.ai_hr.ask_ai(
             "You are a Senior HR Director. Return ONLY valid JSON.", prompt)
