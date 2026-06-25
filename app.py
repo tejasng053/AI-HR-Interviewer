@@ -687,7 +687,7 @@ Return ONLY a valid JSON array: [{{"type": "technical|behavioral|situational", "
     return fallback
 
 def evaluate_answer(question, answer, resume):
-    default = {"score": 5, "feedback": "Evaluation unavailable", "strengths": [], "improvements": [], "technical_accuracy": "medium", "communication": "medium"}
+    default = {"score": 0, "feedback": "Evaluation unavailable", "strengths": [], "improvements": [], "technical_accuracy": "none", "communication": "none"}
     if not st.session_state.get("ai_hr") or not answer.strip():
         return default
     prompt = f"""You are a strict, objective technical interviewer. Your task is to evaluate the candidate's answer to the question provided.
@@ -697,12 +697,12 @@ Candidate Answer: "{answer}"
 Candidate Background: {resume[:2000]}
 
 CRITICAL RULES:
-1. ONLY evaluate the "Candidate Answer". The "Candidate Background" is provided strictly for context (e.g., to understand acronyms they might use). DO NOT give them points just for having a good resume.
-2. If the "Candidate Answer" is empty, extremely short (e.g., "you", "hello", "skip"), gibberish, or fails to address the question, you MUST give a score of 0 or 1.
-3. If the candidate says "I don't know" or avoids the technical core of the question, the score MUST be low (1-3).
-4. Be rigorous. A score of 8-10 requires a detailed, technically accurate, and well-structured response.
 
-Return ONLY valid JSON: {{"score": <0-10>, "feedback": "detailed evaluation", "strengths": ["s1", "s2"], "improvements": ["i1", "i2"], "technical_accuracy": "high/medium/low/none", "communication": "high/medium/low/none"}}"""
+ONLY evaluate the "Candidate Answer". The "Candidate Background" is provided strictly for context (e.g., to understand acronyms they might use). DO NOT give them points just for having a good resume.
+If the "Candidate Answer" is empty, extremely short (e.g., "you", "hello", "skip"), gibberish, or fails to address the question, you MUST give a score of 0 or 1.
+If the candidate says "I don't know" or avoids the technical core of the question, the score MUST be low (1-3).
+Be rigorous. A score of 8-10 requires a detailed, technically accurate, and well-structured response using the STAR method where applicable.
+Return ONLY valid JSON in this exact format: {{"score": <0-10>, "feedback": "detailed evaluation of why the answer was good or bad", "strengths": ["s1"], "improvements": ["i1"], "technical_accuracy": "high|medium|low|none", "communication": "high|medium|low|none"}}"""
     try:
         result = st.session_state.ai_hr.ask_ai(
             "You are an expert interviewer. Return ONLY valid JSON.", prompt)
@@ -717,8 +717,8 @@ Return ONLY valid JSON: {{"score": <0-10>, "feedback": "detailed evaluation", "s
 
 def generate_final_report(state):
     fallback = {
-        "overall_score": int(sum(e.get("score", 5) for e in state["evaluations"]) * 10 / max(len(state["evaluations"]), 1)),
-        "verdict": "Consider", "summary": "Interview completed.",
+        "overall_score": int(sum(e.get("score", 0) for e in state["evaluations"]) * 10 / max(len(state["evaluations"]), 1)),
+        "verdict": "No Hire", "summary": "Interview completed.",
         "key_strengths": [], "key_gaps": [], "detailed_feedback": "",
         "recommended_resources": [], "next_steps": ""
     }
@@ -730,18 +730,17 @@ def generate_final_report(state):
     ])
     prompt = f"""You are a Senior HR Director conducting a final review of a candidate's interview performance for a {state['job_role']} position.
 
-Candidate Resume (Context Only):
-{state['resume_text'][:2000]}
+Candidate Resume (Context Only): {state['resume_text'][:2000]}
 
-Interview Q&A:
+Interview Transcript & Individual Scores:
 {qa_pairs}
 
 CRITICAL RULES:
-1. Your final verdict and overall score MUST strictly reflect the interview performance in the Q&A above.
-2. Do NOT recommend a "Hire" or "Strong Hire" if the candidate skipped questions, gave one-word answers, or scored poorly on individual questions, regardless of how good their resume is.
-3. If the transcript shows the candidate failed to answer the questions properly (e.g., answers are just "you", "skip", or very short), the verdict MUST be "No Hire" and the score must reflect that failure (e.g., 0-30).
 
-Return ONLY valid JSON: {{"overall_score": <0-100>, "verdict": "Strong Hire|Hire|Consider|No Hire", "summary": "executive summary", "key_strengths": ["s1","s2"], "key_gaps": ["g1","g2"], "detailed_feedback": "feedback", "recommended_resources": ["r1"], "next_steps": "next steps"}}"""
+Your final verdict and overall score MUST strictly reflect the interview performance in the transcript above.
+Do NOT recommend a "Hire" or "Strong Hire" if the candidate skipped questions, gave one-word answers, or scored poorly on individual questions, regardless of how good their resume is.
+If the transcript shows the candidate failed to answer the questions properly (e.g., answers are just "you", "skip", or very short), the verdict MUST be "No Hire" and the score must reflect that failure (e.g., 0-30).
+Return ONLY valid JSON in this exact format: {{"overall_score": <0-100>, "verdict": "Strong Hire|Hire|Consider|No Hire", "summary": "executive summary of their actual interview performance", "key_strengths": ["s1","s2"], "key_gaps": ["g1","g2"], "detailed_feedback": "blunt feedback on their answers", "recommended_resources": ["r1"], "next_steps": "next steps"}}"""
     try:
         result = st.session_state.ai_hr.ask_ai(
             "You are a Senior HR Director. Return ONLY valid JSON.", prompt)
