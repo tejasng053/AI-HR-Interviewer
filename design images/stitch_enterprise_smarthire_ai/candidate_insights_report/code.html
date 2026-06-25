@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Candidate Insights Report - HireFlow AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#5c0008",
+                        "on-error": "#690005",
+                        "surface-container-low": "#181b25",
+                        "primary": "#adc6ff",
+                        "secondary-container": "#e3aa00",
+                        "background": "#0f131c",
+                        "inverse-primary": "#005ac2",
+                        "secondary-fixed-dim": "#f9bd22",
+                        "error-container": "#93000a",
+                        "primary-container": "#4d8eff",
+                        "surface-dim": "#0f131c",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-tint": "#adc6ff",
+                        "surface-variant": "#31353f",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "secondary": "#ffc640",
+                        "on-tertiary": "#68000a",
+                        "surface-container": "#1c1f29",
+                        "surface-bright": "#353943",
+                        "on-tertiary-fixed": "#410004",
+                        "outline": "#8c909f",
+                        "on-primary-fixed": "#001a42",
+                        "surface": "#0f131c",
+                        "surface-container-highest": "#31353f",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-secondary-fixed": "#261a00",
+                        "on-primary": "#002e6a",
+                        "tertiary-fixed": "#ffdad7",
+                        "secondary-fixed": "#ffdf9f",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-lowest": "#0a0e17",
+                        "tertiary": "#ffb3ad",
+                        "outline-variant": "#424754",
+                        "on-secondary": "#402d00",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-container": "#5a4100",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-secondary-fixed-variant": "#5c4300",
+                        "on-background": "#dfe2ef",
+                        "inverse-surface": "#dfe2ef",
+                        "on-surface": "#dfe2ef",
+                        "surface-container-high": "#262a34",
+                        "inverse-on-surface": "#2c303a",
+                        "tertiary-container": "#ff5451"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1200px",
+                        "margin-mobile": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+        .glass-card:hover {
+            transform: scale(1.01);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container font-body-md text-body-md pb-24 md:pb-0 md:pl-64">
+<!-- TopNavBar (Mobile Only) -->
+<nav class="md:hidden border-b border-white/5 bg-surface/80 backdrop-blur-xl shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="font-headline-md text-headline-md font-bold text-primary">HireFlow AI</div>
+<div class="flex items-center space-x-4 text-primary">
+<span class="material-symbols-outlined hover:text-primary transition-colors duration-200 cursor-pointer scale-95 active:scale-90" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined hover:text-primary transition-colors duration-200 cursor-pointer scale-95 active:scale-90" data-icon="help">help</span>
+</div>
+</nav>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full w-64 border-r border-white/5 bg-surface-container-low shadow-lg z-50 p-4">
+<div class="mb-8 px-4 mt-4 flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex-shrink-0">
+<img alt="Enterprise Logo" class="w-full h-full object-cover" data-alt="A small, circular abstract enterprise logo design in deep navy and bright white, representing a modern corporate HR portal, high quality, vector style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgSQyOMIn2_3hinpm08brDN5XF6Km5aSY7ia26B68VtrNaq3-yUkOMVqCKGTVddETurNUSQzOsJ4dfv8ro4F2j39R4LI2dIcnQdj_joka1k94m-gDWRH-iYBPC_iJjvoP9AYMwvvO4ZLj6UwYKjyjoVbkcQS_rRDmwSqOcvmQw7OdFas3yAzR5GrrMRZ29ve-9-9LGKIfRRt_7H4ZcvR2f4zvK0QBrpRGDHdEjq5yNucSTcCRyIiDpAzCM6V1YLKsrbNzWf1eWQqXd"/>
+</div>
+<div>
+<div class="font-headline-md text-headline-md text-primary truncate">Enterprise Portal</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant truncate">HR Admin View</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center space-x-3 px-4 py-3 rounded-full text-on-surface-variant hover:bg-surface-variant/50 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-full text-on-surface-variant hover:bg-surface-variant/50 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200" data-icon="workspaces">workspaces</span>
+<span class="font-label-md text-label-md">Campaigns</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-full bg-primary-container text-on-primary-container group" href="#">
+<span class="material-symbols-outlined translate-x-1 duration-200" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-md text-label-md font-bold">Candidates</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-full text-on-surface-variant hover:bg-surface-variant/50 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200" data-icon="insights">insights</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-3 rounded-full text-on-surface-variant hover:bg-surface-variant/50 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-white/5 pt-4 space-y-2">
+<a class="flex items-center space-x-3 px-4 py-2 rounded-full text-on-surface-variant hover:bg-surface-variant/50 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200" data-icon="contact_support">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center space-x-3 px-4 py-2 rounded-full text-on-surface-variant hover:bg-surface-variant/50 transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-24 md:pt-12">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div class="flex items-center gap-6">
+<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-primary/20 flex-shrink-0">
+<img alt="Candidate Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a female software engineering candidate in a modern, well-lit office setting. She looks confident and focused. High quality, soft lighting, dark corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuqP9fVvHYdYsVhyDNqet4s1sQXeH50InI8vGOg9fvABywwFtj7PhsjyGVQ2KZFb9D0xqqXzKbtz3GqZ-8aUEoIvTsiQsDTjupEfb-bR8qLkbO_s3HIbJeq2XfUTSeitr_03h9ZfGIMvfEWom1nAyNMdEy4p76NfjPUBdA7rc2xN3SPdTPHsWi5ymWewB1U3d83B2fpn0iMRz8Tqx_ukRIvqxiccH7qk1raMVoi8iWbYvKsi2cR1y4HX0IXXP4ShlqNdXy1Lj4Mcqd"/>
+</div>
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-1">Elena Rodriguez</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Senior Machine Learning Engineer</p>
+<div class="flex items-center gap-2 mt-2 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[16px]" data-icon="event">event</span> Interviewed Oct 24, 2023
+                    </div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex items-center gap-4">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">AI Recommendation</span>
+<span class="font-headline-md text-headline-md text-secondary">Strong Hire</span>
+</div>
+<div class="w-16 h-16 rounded-full border-4 border-secondary/20 border-t-secondary flex items-center justify-center relative">
+<span class="font-headline-md text-headline-md text-secondary">94</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Proficiency Radar (Placeholder) -->
+<section class="glass-card rounded-xl p-6 lg:col-span-1 flex flex-col">
+<h2 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="radar">radar</span> Core Competencies
+                </h2>
+<div class="flex-1 flex items-center justify-center relative min-h-[250px]">
+<!-- Abstract representation of a radar chart using borders and a colored polygon -->
+<div class="w-48 h-48 rounded-full border border-outline-variant/30 absolute flex items-center justify-center">
+<div class="w-32 h-32 rounded-full border border-outline-variant/30 absolute"></div>
+<div class="w-16 h-16 rounded-full border border-outline-variant/30 absolute"></div>
+<!-- Polygon Shape -->
+<div class="absolute inset-0" style="clip-path: polygon(50% 10%, 90% 40%, 80% 90%, 20% 90%, 10% 40%); background-color: rgba(77, 142, 255, 0.2); border: 1px solid #4d8eff;"></div>
+</div>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 -mt-2 font-label-sm text-label-sm text-on-surface">Technical</div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 -mb-2 font-label-sm text-label-sm text-on-surface">Culture</div>
+<div class="absolute top-1/2 right-0 translate-x-4 -translate-y-1/2 font-label-sm text-label-sm text-on-surface">Comm.</div>
+<div class="absolute top-1/2 left-0 -translate-x-4 -translate-y-1/2 font-label-sm text-label-sm text-on-surface">Leadership</div>
+</div>
+</section>
+<!-- Key Strengths & Areas -->
+<section class="glass-card rounded-xl p-6 lg:col-span-2 flex flex-col gap-6">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="thumb_up">thumb_up</span> Key Strengths
+                    </h2>
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-label-md text-label-md">System Architecture</span>
+<span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-label-md text-label-md">Python/PyTorch</span>
+<span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-label-md text-label-md">Clear Articulation</span>
+<span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-label-md text-label-md">Cross-functional Collab</span>
+</div>
+</div>
+<div class="h-px w-full bg-white/5"></div>
+<div>
+<h2 class="font-headline-md text-headline-md text-outline mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span> Areas for Probe
+                    </h2>
+<ul class="space-y-3 font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="lightbulb">lightbulb</span>
+<span>Limited direct experience managing teams larger than 5; follow up on scaling leadership.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="lightbulb">lightbulb</span>
+<span>Gave a somewhat brief answer regarding specific CI/CD pipeline challenges.</span>
+</li>
+</ul>
+</div>
+</section>
+</div>
+<!-- Transcript View -->
+<section class="glass-card rounded-xl overflow-hidden flex flex-col border border-white/5 mb-12">
+<div class="bg-surface-container-high px-6 py-4 border-b border-white/5 flex justify-between items-center sticky top-0 z-10">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="format_quote">format_quote</span> Interview Highlights
+                </h2>
+<div class="flex gap-2">
+<button class="bg-surface text-on-surface-variant px-3 py-1 rounded-md border border-white/5 font-label-sm text-label-sm hover:text-primary transition-colors">All</button>
+<button class="bg-primary/10 text-primary px-3 py-1 rounded-md border border-primary/20 font-label-sm text-label-sm">Highlights</button>
+</div>
+</div>
+<div class="p-6 space-y-6 max-h-[500px] overflow-y-auto">
+<!-- Highlighted Block -->
+<div class="bg-primary/5 border-l-2 border-primary pl-4 py-2 relative group rounded-r-lg">
+<div class="absolute right-4 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="bg-primary text-on-primary font-label-sm text-label-sm px-2 py-1 rounded-sm">Tech Proficiency</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-primary font-bold">Elena</span>
+<span class="font-label-sm text-label-sm text-outline">12:45</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+                        "For that specific distributed training issue, we moved away from standard data parallelism and implemented <span class="bg-secondary/20 text-secondary-fixed px-1 rounded">ZeRO-stage 3 optimizations</span>, which immediately reduced our memory footprint by about 60% per GPU, allowing us to increase the batch size significantly."
+                    </p>
+</div>
+<!-- Normal Block -->
+<div class="pl-4 py-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">Interviewer</span>
+<span class="font-label-sm text-label-sm text-outline">13:10</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        That makes sense. How did you handle the communication overhead between nodes when you made that switch?
+                    </p>
+</div>
+<!-- Highlighted Block -->
+<div class="bg-secondary/5 border-l-2 border-secondary pl-4 py-2 relative group rounded-r-lg">
+<div class="absolute right-4 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="bg-secondary text-on-secondary font-label-sm text-label-sm px-2 py-1 rounded-sm">Communication</span>
+</div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-md text-label-md text-primary font-bold">Elena</span>
+<span class="font-label-sm text-label-sm text-outline">13:15</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+                        "It definitely introduced latency. I sat down with the infrastructure team and <span class="bg-secondary/20 text-secondary-fixed px-1 rounded">we mapped out the network topology</span>. By ensuring our node groups were localized within the same rack switches, we mitigated the worst of it. It was a great lesson in not just looking at the algorithm, but the actual hardware underneath it."
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden border-t border-white/5 bg-surface/80 backdrop-blur-xl shadow-[0_-4px_24px_rgba(0,0,0,0.4)] fixed bottom-0 w-full z-50 flex justify-around items-center h-20 px-2 pb-safe">
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-primary font-bold border-t-2 border-primary pt-1 pb-1 bg-primary/5" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-sm text-label-sm">Candidates</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="insights">insights</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireFlow AI - HR Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#5c0008",
+                    "on-error": "#690005",
+                    "surface-container-low": "#181b25",
+                    "primary": "#adc6ff",
+                    "secondary-container": "#e3aa00",
+                    "background": "#0f131c",
+                    "inverse-primary": "#005ac2",
+                    "secondary-fixed-dim": "#f9bd22",
+                    "error-container": "#93000a",
+                    "primary-container": "#4d8eff",
+                    "surface-dim": "#0f131c",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-tint": "#adc6ff",
+                    "surface-variant": "#31353f",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "secondary": "#ffc640",
+                    "on-tertiary": "#68000a",
+                    "surface-container": "#1c1f29",
+                    "surface-bright": "#353943",
+                    "on-tertiary-fixed": "#410004",
+                    "outline": "#8c909f",
+                    "on-primary-fixed": "#001a42",
+                    "surface": "#0f131c",
+                    "surface-container-highest": "#31353f",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-secondary-fixed": "#261a00",
+                    "on-primary": "#002e6a",
+                    "tertiary-fixed": "#ffdad7",
+                    "secondary-fixed": "#ffdf9f",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-container-lowest": "#0a0e17",
+                    "tertiary": "#ffb3ad",
+                    "outline-variant": "#424754",
+                    "on-secondary": "#402d00",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "on-primary-container": "#00285d",
+                    "on-secondary-container": "#5a4100",
+                    "on-surface-variant": "#c2c6d6",
+                    "on-secondary-fixed-variant": "#5c4300",
+                    "on-background": "#dfe2ef",
+                    "inverse-surface": "#dfe2ef",
+                    "on-surface": "#dfe2ef",
+                    "surface-container-high": "#262a34",
+                    "inverse-on-surface": "#2c303a",
+                    "tertiary-container": "#ff5451"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "container-max": "1200px",
+                    "margin-mobile": "16px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "headline-xl": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-xl": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glow-line {
+            filter: drop-shadow(0 0 8px rgba(173, 198, 255, 0.6));
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md overflow-x-hidden min-h-screen flex flex-col md:flex-row">
+<!-- TopNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface/80 backdrop-blur-xl dark:bg-surface-container-lowest/80 text-primary border-b border-white/5 shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">HireFlow AI</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary scale-95 active:scale-90 transition-transform">notifications</span>
+<span class="material-symbols-outlined text-primary scale-95 active:scale-90 transition-transform">help</span>
+</div>
+</nav>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="bg-surface-container-low dark:bg-surface-container-lowest text-primary border-r border-white/5 shadow-lg hidden md:flex flex-col fixed left-0 top-0 h-full w-64 p-4 z-40">
+<div class="mb-8 px-4 mt-4">
+<div class="flex items-center gap-3 mb-6">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="A small, premium corporate logo placeholder featuring a minimalist geometric design in white against a dark background. Designed for a dark mode enterprise dashboard, indicating high-end AI software." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl97X-dcNLelIkenwCzmJAQqmslrpPMY6xZ5X0peuqhgenI2YMfmhBDVbq2fpbHwj4BStTCk457-rZ-2xPYywfAPEwGQY6VcbUeBY2wl_M4ivWXGC9gS0frWgzIpH4wl7GFYmDbI6i9wIeM446Lef8mIEuUYDhrQUAjqQz07iY7w126kPOX_HL0DiytKK3TU54AiCuStej0BJm-OZiMMxwZFuYp5n6oplfCDYkgZrvZ_9wVY4Sx6hjaZxCWlAE0ElGZObgO56FL4rC"/>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Enterprise Portal</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">HR Admin View</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<ul class="space-y-2">
+<li>
+<a class="bg-primary-container text-on-primary-container rounded-full flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">workspaces</span>
+<span class="font-label-md text-label-md">Campaigns</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Candidates</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="mt-auto border-t border-white/5 pt-4">
+<ul class="space-y-2">
+<li>
+<a class="text-on-surface-variant flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant flex items-center gap-3 px-4 py-3 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</li>
+</ul>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col md:ml-64 pt-16 md:pt-0 min-h-screen">
+<!-- TopNavBar (Desktop Nav Context - integrated into main area for layout ease) -->
+<header class="hidden md:flex justify-between items-center px-margin-desktop h-20 border-b border-white/5 glass-panel sticky top-0 z-30">
+<h1 class="font-headline-lg text-headline-lg font-bold text-on-surface">Dashboard</h1>
+<div class="flex items-center gap-6">
+<nav class="flex gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Interviews</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Reports</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Integrations</a>
+</nav>
+<div class="w-px h-6 bg-white/10 mx-2"></div>
+<button class="scale-95 active:scale-90 transition-transform"><span class="material-symbols-outlined text-on-surface-variant hover:text-primary">notifications</span></button>
+<button class="scale-95 active:scale-90 transition-transform"><span class="material-symbols-outlined text-on-surface-variant hover:text-primary">help</span></button>
+<img class="w-10 h-10 rounded-full border border-primary object-cover cursor-pointer" data-alt="A professional headshot of an HR Executive in modern corporate attire. Neutral dark background. Soft, flattering high-key studio lighting with a slight cool tint matching a high-end AI interface context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ89oLs62sIci6hrtDmZuJpj2UM6nw0PP0VsAAIJVMmZRUc6u2o9IErYDblCW4n4vme7O7DuWXRa7VQFfDA8ilQsVZKVMIcd4BopzQsQfzgDJP2lHmMWGKogq5tc8YgufCIOJnfl5bIa9oHuO7eRTes0rXzOoVUuunajMGoCbyN_G3HOvy7plBv7_51-hPUWFbTL3mbuV9wg0iFQs0yiJpUCtTKKnfQHQg9c1TypbjkVqX_L9ja5I7-iKyJAw2VXkTOQVmnxwh8QX9"/>
+</div>
+</header>
+<div class="p-margin-mobile md:p-margin-desktop flex-1">
+<!-- Dashboard Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Active Campaigns (Main Feature) -->
+<div class="md:col-span-8 glass-panel rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md font-semibold text-on-surface">Active Interview Campaigns</h3>
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm flex items-center gap-1">View All <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+<!-- Campaign Card 1 -->
+<div class="bg-surface-container-high rounded-lg p-5 border border-white/5 hover:scale-[1.01] transition-transform duration-300 relative overflow-hidden group cursor-pointer">
+<div class="absolute top-0 left-0 w-full h-1 bg-secondary-container"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Senior Product Manager</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">San Francisco, CA</p>
+</div>
+<span class="bg-primary/10 text-primary px-2 py-1 rounded font-label-sm text-label-sm border border-primary/20">Live</span>
+</div>
+<div class="flex items-center gap-4 mt-6">
+<div class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-high relative z-30" data-alt="A small circular avatar of a diverse candidate, neutral expression, professional dark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMIFbHM4eYYtBMAu4helouMlppXpviN3Bv6XVOzFJbfbGv004Bj7IjdombnVcVhjVVTaGveSYpr40aS-xoyJYkhpHLedBBzvZKE4vHwhsS5Y-cV86m4ZIeGS4CKCR1riAUT8B26A4IYi01koQ-N0x5__yqb6L2R6WYujEfxvL7oYl3kiIR-zrf8vqkcwLQMzldyp-6rvNEkYUNVIog2fCHT_igs5Qhv__PZMfl7YGy-s8KjtJ9pUq5n_wMyw5AspPsSxK3d_05JSwi"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-high relative z-20" data-alt="A small circular avatar of a diverse candidate, slight smile, professional dark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUEjkQmukkYmZMxhFt7511huQhFMq-lzpn35VgvBJPc0SlkC7kxkXl87cP5sTDUGPwKRQuo7WtEd0kBUxJ_r7rEbFmsgxmRBbjzOGRwpyNuELpiGAfLxZk--PkCNdrS74s0IOq4JM30GqSpqqAVP3pQeBsKWC9j9LTt9WlkKcu71_lFDUhXQp6DyKwBWotT7rg2IGV5QZhMHI47qBmQE63VY0pKRIqYDy2DQmTlmYD6ThxeoJc7tPh7nyRwaFxR-cDTJx4no4eEnYM"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-high relative z-10" data-alt="A small circular avatar of a diverse candidate, focused look, professional dark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjIWQ1fSx-GZJYkdEmzNfuRvPfqH__QnyplzP7ZCmviDvvYWIvx-OixJC8UT2eYfr8iUqHfwItNw2USWrWNaP-gjrceRBWoyoEGKAB9I9tE_6yrIQfBG3hxmRw8OL8ElKghWnF9aZxi-Iq2dhU3Lygxxdwoh4ta_50KHZA6ywESO1QVM-x2CQ6fnBzkf3evskTKzwxWnHfVyvqFxhH3xJG-xzEcY5jzWG6ekvawDM364M6ajJ61PZ98ZHqyaV7Mn88g09pJH8ngzTR"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">+42 Candidates</span>
+</div>
+</div>
+<!-- Campaign Card 2 -->
+<div class="bg-surface-container-high rounded-lg p-5 border border-white/5 hover:scale-[1.01] transition-transform duration-300 relative overflow-hidden group cursor-pointer">
+<div class="absolute top-0 left-0 w-full h-1 bg-tertiary-container"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Lead AI Engineer</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Remote</p>
+</div>
+<span class="bg-tertiary/10 text-tertiary-container px-2 py-1 rounded font-label-sm text-label-sm border border-tertiary/20">Urgent</span>
+</div>
+<div class="flex items-center gap-4 mt-6">
+<div class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-high relative z-20" data-alt="A small circular avatar of an engineering candidate, neutral expression, dark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgnBkM70-Y9x-1EIGjbkQW_I-AY8QQotSW1Yw8UOtjbhWXFTcwAVUrbKpc_mBUQQbcHurFRe8Xx9p4fUXpYdHLV9Snh__9jgWuVa5G1YtMG-LJWR4qeAHSvI1CmwKAAgCag8OR2ULV8UTeC6LqPwFHagN4hm3nB1JnHBlglma7qQ2oyzPXoQd__cRs2RMMk7BxHlVpUdxe3FJEVSxmeShOa7vuvb8l5JNt0tSirLJtd4SctJZOGbQacuWQwye5MD6mkrFOIeOxywU_"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-high relative z-10" data-alt="A small circular avatar of an engineering candidate, wearing glasses, dark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD5ogDtxSeMp5H19LNJYT07Uec_Yn4QTM4nJ7IJW_obDdIUoA3x812eU9LpzA0ZN8zf-uFoO8n7iBQ3zJVc7KCfIi2btuc_2FGqff1R_l32VjSkthfWhG42YvLv_P52HosSjvWGUJY7H_h8P1Ei1pXbXqIoICp_mV7VNrSlUM5DiT1Wo9rHyEUS2h0ms7SPq9kQuMvYrhGgJJsrtDY5bb77YuoMz27RrNJ5OtgQI2z3X_tcFH4PJPmDESBD2GUT9pyJCe7jdXbeFxx"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">+15 Candidates</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats / Chart -->
+<div class="md:col-span-4 glass-panel rounded-xl p-6 flex flex-col justify-between">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Candidates Processed</p>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface mt-2">1,248</h2>
+<p class="font-label-sm text-label-sm text-primary mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-sm">trending_up</span> +12% from last month</p>
+</div>
+<div class="mt-8 relative h-32 w-full flex items-end">
+<!-- Simulated glowing line chart with SVG -->
+<svg class="w-full h-full preserve-3d overflow-visible" preserveaspectratio="none" viewbox="0 0 100 40">
+<defs>
+<lineargradient id="chartGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#adc6ff" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#adc6ff" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,40 L0,30 C20,30 30,10 50,15 C70,20 80,5 100,2 L100,40 Z" fill="url(#chartGrad)"></path>
+<path class="glow-line" d="M0,30 C20,30 30,10 50,15 C70,20 80,5 100,2" fill="none" stroke="#adc6ff" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- Recent Top Candidates -->
+<div class="md:col-span-12 glass-panel rounded-xl p-6 mt-2">
+<h3 class="font-headline-md text-headline-md font-semibold text-on-surface mb-6">Recent Top Candidates</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-white/5 text-on-surface-variant font-label-sm text-label-sm uppercase">
+<th class="pb-3 font-medium">Candidate</th>
+<th class="pb-3 font-medium">Role</th>
+<th class="pb-3 font-medium">Interview Date</th>
+<th class="pb-3 font-medium text-right">AI Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-white/5 hover:bg-surface-variant/20 transition-colors group">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Professional headshot of a candidate in a dark mode setting. Clean, sharp lighting, corporate attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKlm-ntK_AznAB6gLWxytoeywqRDxhCT6dIsuq3FO-CR7KbBphCPNh1pi6i0qsSQ7XiMKxNBsOO4lcN3-PWqdXWwhGLvfokb4W4y9MCtX_gGhf03n1txkB-E8E1PZIb64coEx6nD-2ix5iMs_3ISFYy-WM6EkWfhgPekAquW-otbl4-e-b7DRyk1qOrW5cIXrzOcnrbqDKuk61TUqB9n8qlfpZsHdC-X9GutAS8t-R6y5Jwv7NDHB8DTVKDfw0Mh2vmvHamQ0W--ff"/>
+<div>
+<p class="font-body-md text-body-md font-medium text-on-surface">Sarah Jenkins</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">sarah.j@example.com</p>
+</div>
+</div>
+</td>
+<td class="py-4 font-body-md text-body-md text-on-surface">Senior Product Manager</td>
+<td class="py-4 font-body-md text-body-md text-on-surface-variant">Oct 24, 2023</td>
+<td class="py-4 text-right">
+<span class="inline-flex items-center justify-center bg-primary/10 border border-primary/30 text-primary font-bold rounded-full h-8 w-14 font-label-md text-label-md">98</span>
+</td>
+</tr>
+<tr class="border-b border-white/5 hover:bg-surface-variant/20 transition-colors group">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Professional headshot of a male candidate in a dark mode setting. Clean, sharp lighting, corporate attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQM1s11PjnnsrcZxtEXf1681Tp7uLyGCchiEegmnVLF0CXUmfMm5giHn6v0AAyZ7VU4DGOCoV8kdbjHVcYsBWERjthIuJmV4JHTkQ4r4TMAL2kx1HfNlEb406lEqN7I-wB_uYf76SqJ72YT96VCBcsdJ05qDwIJxG2wVlPxOEqkXr2cjhRoq7MR4k3qAez4xk5pA-CiW2w-o5XVD3x9fol3KNWp96U3Bd6PjwLTJQttmNAdB-uso0Y3Y3SYRUcmgxSVDak3W3_Orqq"/>
+<div>
+<p class="font-body-md text-body-md font-medium text-on-surface">Michael Chen</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">m.chen@example.com</p>
+</div>
+</div>
+</td>
+<td class="py-4 font-body-md text-body-md text-on-surface">Lead AI Engineer</td>
+<td class="py-4 font-body-md text-body-md text-on-surface-variant">Oct 23, 2023</td>
+<td class="py-4 text-right">
+<span class="inline-flex items-center justify-center bg-primary/10 border border-primary/30 text-primary font-bold rounded-full h-8 w-14 font-label-md text-label-md">95</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/20 transition-colors group">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Professional headshot of a female candidate in a dark mode setting. Clean, sharp lighting, corporate attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAT7EPFSZs3A7W6lvn8h5evrYZJi5AqevstkiFFyNHnP9pgI2LJVRU30QqosCKcZafhxupDJ0NKpMFRFwr8AOvOhPjWPHI4jhchVwSkItqcuxO12npz00X_UyVSm5R7p9g90HWa8DblLXGYgjXbq35M4iEfoDbd6wO8G6uMX7MF0PHE9CjbAGOhFb5ejmjyx_fFIHJNuwRdiX-GTb6BOZ6CrgSVWfmDroKGNR0MAiOS3d0z5rLnHUsx8loteumnGcqKJqPjO7pRE10q"/>
+<div>
+<p class="font-body-md text-body-md font-medium text-on-surface">Elena Rodriguez</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">elena.r@example.com</p>
+</div>
+</div>
+</td>
+<td class="py-4 font-body-md text-body-md text-on-surface">UX Director</td>
+<td class="py-4 font-body-md text-body-md text-on-surface-variant">Oct 21, 2023</td>
+<td class="py-4 text-right">
+<span class="inline-flex items-center justify-center bg-secondary/10 border border-secondary/30 text-secondary font-bold rounded-full h-8 w-14 font-label-md text-label-md">89</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

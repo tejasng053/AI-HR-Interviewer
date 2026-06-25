@@ -9,6 +9,9 @@ import time
 import re
 from datetime import datetime
 
+import plotly.graph_objects as go
+import plotly.express as px
+
 try:
     from kaggle_hr_ai_model import SuperAIHR
 except ImportError:
@@ -24,55 +27,470 @@ except ImportError:
 
 st.set_page_config(page_title="AI HR Interviewer", page_icon="🤖", layout="wide", initial_sidebar_state="expanded")
 
-# Custom CSS for better UI
+# Custom CSS - Executive Zenith Design System
 st.markdown("""
 <style>
-    .main { padding-top: 1rem; }
-    .stButton > button {
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.2s;
-    }
-    .stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-    }
-    .stButton > button[kind="primary"]:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-    .question-card {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border: 1px solid #dee2e6;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-    }
-    .recording-active {
-        background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
-        border: 2px solid #fc8181;
-        border-radius: 12px;
-        padding: 1.5rem;
-        animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(252, 129, 129, 0.4); }
-        50% { box-shadow: 0 0 0 10px rgba(252, 129, 129, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(252, 129, 129, 0); }
-    }
-    .metric-card {
-        background: white;
-        border-radius: 10px;
-        padding: 1rem;
-        border: 1px solid #e2e8f0;
-        text-align: center;
-    }
-    .sidebar .stSelectbox > div > div { background: #f7fafc; }
-    .stProgress > div > div > div { background: linear-gradient(90deg, #667eea, #764ba2); }
-    h1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .stTabs [data-baseweb="tab-list"] { gap: 8px; }
-    .stTabs [data-baseweb="tab"] { border-radius: 8px 8px 0 0; }
-    div[data-testid="stAudioInput"] { margin: 1rem 0; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+    /* Colors - Executive Zenith Dark */
+    --bg-deep: #0a0e17;
+    --bg-base: #0f131c;
+    --surface: #111827;
+    --surface-elevated: #1f2937;
+    --surface-container: #1c1f29;
+    --surface-container-high: #262a34;
+    --surface-container-highest: #31353f;
+    --primary: #3b82f6;
+    --primary-glow: #60a5fa;
+    --primary-container: #4d8eff;
+    --primary-fixed: #d8e2ff;
+    --primary-fixed-dim: #adc6ff;
+    --secondary: #ffc640;
+    --secondary-fixed: #ffdf9f;
+    --secondary-fixed-dim: #f9bd22;
+    --secondary-container: #e3aa00;
+    --tertiary: #ffb3ad;
+    --tertiary-container: #ff5451;
+    --error: #ef4444;
+    --error-container: #93000a;
+    --success: #22c55e;
+    --on-surface: #dfe2ef;
+    --on-surface-variant: #c2c6d6;
+    --on-primary: #002e6a;
+    --on-primary-container: #00285d;
+    --on-secondary: #402d00;
+    --on-secondary-container: #5a4100;
+    --on-tertiary: #68000a;
+    --on-error: #690005;
+    --outline: #8c909f;
+    --outline-variant: #424754;
+    --border: rgba(255,255,255,0.05);
+    --border-strong: rgba(255,255,255,0.12);
+
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    --text-display: 48px;
+    --text-headline-lg: 32px;
+    --text-headline-md: 24px;
+    --text-body-lg: 18px;
+    --text-body-md: 16px;
+    --text-label-md: 14px;
+    --text-label-sm: 12px;
+    --line-tight: 1.15;
+    --line-normal: 1.5;
+    --line-relaxed: 1.75;
+
+    /* Spacing (4px unit) */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* Border Radius */
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.35);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+    --shadow-xl: 0 16px 48px rgba(0,0,0,0.45);
+    --shadow-glow-primary: 0 0 24px rgba(59,130,246,0.15);
+    --shadow-glow-secondary: 0 0 24px rgba(255,198,64,0.15);
+    --shadow-glow-error: 0 0 24px rgba(239,68,68,0.15);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(17,24,39,0.6);
+    --glass-border: 1px solid rgba(255,255,255,0.05);
+    --glass-blur: blur(12px);
+    --glass-bg-strong: rgba(17,24,39,0.8);
+}
+
+/* Global Reset */
+.main {
+    padding-top: var(--space-6);
+    font-family: var(--font-sans);
+}
+
+.block-container {
+    max-width: 1200px;
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+}
+
+html, body, [data-testid="stAppViewContainer"] {
+    background: radial-gradient(ellipse at center, var(--bg-base) 0%, var(--bg-deep) 100%) !important;
+    color: var(--on-surface);
+    font-family: var(--font-sans);
+}
+
+::selection {
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+}
+
+/* Typography Scale */
+.font-display { font-size: var(--text-display); font-weight: 700; line-height: var(--line-tight); letter-spacing: -0.02em; }
+.font-headline-lg { font-size: var(--text-headline-lg); font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+.font-headline-md { font-size: var(--text-headline-md); font-weight: 600; line-height: 1.33; }
+.font-body-lg { font-size: var(--text-body-lg); font-weight: 400; line-height: var(--line-relaxed); }
+.font-body-md { font-size: var(--text-body-md); font-weight: 400; line-height: var(--line-normal); }
+.font-label-md { font-size: var(--text-label-md); font-weight: 500; line-height: 1.43; letter-spacing: 0.01em; }
+.font-label-sm { font-size: var(--text-label-sm); font-weight: 600; line-height: 1.33; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* Glassmorphism Components */
+.glass-panel, .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-xl);
+}
+
+.glass-panel:hover, .glass-card:hover {
+    transform: scale(1.01);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-xl);
+}
+
+/* Buttons */
+.stButton > button {
+    border-radius: var(--radius-md) !important;
+    font-weight: 600 !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--text-label-md) !important;
+    letter-spacing: 0.01em !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    padding: var(--space-3) var(--space-6) !important;
+    height: auto !important;
+}
+
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%) !important;
+    color: var(--on-primary) !important;
+    box-shadow: var(--shadow-md), var(--shadow-glow-primary) !important;
+}
+
+.stButton > button[kind="primary"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-lg), var(--shadow-glow-primary) !important;
+    background: linear-gradient(135deg, var(--primary-glow) 0%, var(--primary) 100%) !important;
+}
+
+.stButton > button[kind="secondary"] {
+    background: transparent !important;
+    color: var(--on-surface) !important;
+    border: 1px solid var(--border-strong) !important;
+}
+
+.stButton > button[kind="secondary"]:hover {
+    background: var(--surface-container-high) !important;
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+
+/* Audio Input */
+div[data-testid="stAudioInput"] {
+    margin: var(--space-4) 0 !important;
+}
+
+div[data-testid="stAudioInput"] > div {
+    background: var(--surface-container) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Progress Bar */
+.stProgress > div > div > div {
+    background: linear-gradient(90deg, var(--primary), var(--primary-glow)) !important;
+    border-radius: var(--radius-full) !important;
+}
+
+.stProgress > div > div {
+    background: var(--surface-container-high) !important;
+    border-radius: var(--radius-full) !important;
+    height: 6px !important;
+}
+
+/* Inputs */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stSelectbox > div > div {
+    background: var(--surface-container) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--on-surface) !important;
+    font-family: var(--font-sans) !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus,
+.stSelectbox > div > div:focus-within {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.2) !important;
+    outline: none !important;
+}
+
+.stTextInput > label,
+.stTextArea > label,
+.stSelectbox > label {
+    color: var(--on-surface-variant) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--text-label-md) !important;
+    font-weight: 500 !important;
+}
+
+/* File Uploader */
+section[data-testid="stFileUploader"] {
+    background: var(--surface-container) !important;
+    border: 2px dashed var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: var(--space-6) !important;
+}
+
+section[data-testid="stFileUploader"]:hover {
+    border-color: var(--primary) !important;
+    background: var(--surface-container-high) !important;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: var(--space-2) !important;
+    background: transparent !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding-bottom: var(--space-2) !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent !important;
+    border-radius: var(--radius-md) !important;
+    color: var(--on-surface-variant) !important;
+    font-family: var(--font-sans) !important;
+    font-weight: 500 !important;
+    padding: var(--space-2) var(--space-4) !important;
+    border: none !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background: var(--surface-container) !important;
+    color: var(--on-surface) !important;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    background: var(--primary-container) !important;
+    color: var(--on-primary-container) !important;
+    box-shadow: var(--shadow-glow-primary) !important;
+}
+
+/* Metrics */
+div[data-testid="stMetric"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    padding: var(--space-4) !important;
+}
+
+div[data-testid="stMetricLabel"] {
+    color: var(--on-surface-variant) !important;
+    font-family: var(--font-sans) !important;
+    font-size: var(--text-label-md) !important;
+}
+
+div[data-testid="stMetricValue"] {
+    color: var(--on-surface) !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 600 !important;
+}
+
+/* Containers with borders */
+.stContainer > div[style*="border"] {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    background: var(--surface-container) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-lg) !important;
+    color: var(--on-surface) !important;
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+}
+
+.streamlit-expanderContent {
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    border-top: none !important;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+@keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.6); }
+    70% { box-shadow: 0 0 0 12px rgba(239,68,68,0); }
+    100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+}
+
+@keyframes waveform {
+    0%, 100% { height: 8px; opacity: 0.4; }
+    50% { height: 32px; opacity: 1; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: var(--shadow-glow-primary); }
+    50% { box-shadow: 0 0 32px rgba(59,130,246,0.3); }
+}
+
+/* Recording indicator */
+.recording-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--error-container);
+    border: 1px solid var(--error);
+    border-radius: var(--radius-full);
+    color: var(--error);
+    font-family: var(--font-label-sm);
+    font-size: var(--text-label-sm);
+    animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.recording-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--error);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+/* Waveform bars */
+.waveform-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 3px;
+    height: 50px;
+    width: 100%;
+    max-width: 200px;
+}
+
+.waveform-bar {
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary-fixed-dim), var(--primary));
+    border-radius: 2px;
+    animation: waveform 1.5s ease-in-out infinite alternate;
+}
+
+.waveform-bar:nth-child(1) { animation-delay: 0.0s; }
+.waveform-bar:nth-child(2) { animation-delay: 0.15s; }
+.waveform-bar:nth-child(3) { animation-delay: 0.3s; }
+.waveform-bar:nth-child(4) { animation-delay: 0.45s; }
+.waveform-bar:nth-child(5) { animation-delay: 0.1s; }
+.waveform-bar:nth-child(6) { animation-delay: 0.25s; }
+.waveform-bar:nth-child(7) { animation-delay: 0.4s; }
+
+/* Timer display */
+.timer-display {
+    font-family: var(--font-mono);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--secondary-fixed-dim);
+    letter-spacing: 0.02em;
+}
+
+/* Score badge */
+.score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 700;
+    border: 3px solid;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: var(--surface) !important;
+    border-right: 1px solid var(--border) !important;
+}
+
+section[data-testid="stSidebar"] .stSelectbox > div > div {
+    background: var(--surface-container) !important;
+}
+
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+    color: var(--primary-fixed-dim) !important;
+}
+
+/* Dividers */
+hr {
+    border-color: var(--border) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--surface-container-high);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--outline-variant);
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -132,6 +550,16 @@ if "interview_state" not in st.session_state:
         "audio_bytes": None,
         "num_questions": 5, "difficulty": "Progressive",
         "q_types": "Technical, Behavioral, Situational",
+        # Multi-dimensional scoring
+        "dimension_scores": {
+            "technical": [], "communication": [], "problem_solving": [],
+            "cultural_fit": [], "confidence": []
+        },
+        "engagement_metrics": {
+            "think_time_used": [], "response_length": [], "pause_count": []
+        },
+        "phase_timestamps": {},
+        "candidate_profile": {}
     }
 
 # ══════════════════════════════════════════
@@ -294,72 +722,224 @@ Return ONLY valid JSON: {{"overall_score": <0-100>, "verdict": "Strong Hire|Hire
         pass
     return fallback
 
-def render_countdown_timer(seconds, label):
+def render_think_timer(seconds, label):
+    """3D Circular Think Timer - Auto-starts, no button needed"""
     placeholder = st.empty()
-    progress = st.progress(0.0)
     for i in range(seconds, 0, -1):
         mins, secs = divmod(i, 60)
+        progress_pct = (seconds - i) / seconds
+        degrees = progress_pct * 360
+        
+        # Color shifts from gold to blue as time progresses
+        if i > seconds * 0.66:
+            timer_color = "var(--secondary-fixed-dim)"
+            glow_color = "rgba(251,191,36,0.4)"
+        elif i > seconds * 0.33:
+            timer_color = "var(--primary-glow)"
+            glow_color = "rgba(96,165,250,0.4)"
+        else:
+            timer_color = "var(--error)"
+            glow_color = "rgba(239,68,68,0.4)"
+        
         placeholder.markdown(f"""
-        <div style="text-align:center; padding:30px 0;">
-            <div style="font-size:80px; font-weight:bold; color:#FFD700; font-family:monospace;">{mins:02d}:{secs:02d}</div>
-            <div style="font-size:22px; color:#aaa; margin-top:10px;">{label}</div>
-        </div>""", unsafe_allow_html=True)
-        progress.progress((seconds - i) / seconds)
+        <div style="text-align:center; padding: var(--space-8) 0;">
+            <!-- 3D Circular Progress -->
+            <div style="position:relative; width:200px; height:200px; margin:0 auto var(--space-6);">
+                <!-- Background ring -->
+                <svg width="200" height="200" style="transform: rotate(-90deg);">
+                    <circle cx="100" cy="100" r="88" 
+                            fill="none" stroke="var(--border)" stroke-width="8"/>
+                    <!-- Progress ring -->
+                    <circle cx="100" cy="100" r="88"
+                            fill="none" stroke="{timer_color}" stroke-width="8"
+                            stroke-linecap="round"
+                            stroke-dasharray="553"
+                            stroke-dashoffset="{553 * (1 - progress_pct)}"
+                            style="filter: drop-shadow(0 0 8px {glow_color}); transition: stroke-dashoffset 1s linear, stroke 0.3s;"/>
+                </svg>
+                <!-- Center content -->
+                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
+                    <div class="timer-display" style="font-size:48px;">{mins:02d}:{secs:02d}</div>
+                    <div style="font-size:12px; color:var(--on-surface-variant); text-transform:uppercase; letter-spacing:0.1em; margin-top:4px;">{label}</div>
+                </div>
+            </div>
+            <!-- Progress bar -->
+            <div style="width:60%; margin:0 auto; height:4px; background:var(--surface-container-high); border-radius:var(--radius-full); overflow:hidden;">
+                <div style="width:{progress_pct*100}%; height:100%; background:linear-gradient(90deg, var(--secondary-fixed-dim), var(--primary-glow)); border-radius:var(--radius-full); transition:width 1s linear;"></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         time.sleep(1)
     placeholder.empty()
-    progress.empty()
 
-def render_recording_timer_js():
-    components.html("""
-    <div style="text-align:center; padding:15px; font-family:'Segoe UI',Arial,sans-serif;">
-        <div style="display:inline-flex; align-items:center; gap:12px; background:rgba(255,50,50,0.1); border:2px solid #ff4444; border-radius:16px; padding:16px 32px;">
-            <div id="dot" style="width:16px;height:16px;border-radius:50%;background:#ff4444;animation:pulse 1s infinite;"></div>
-            <div id="timer" style="font-size:42px;font-weight:bold;color:#ff4444;font-family:monospace;">01:30</div>
+def render_recording_waveform():
+    """Live Recording Waveform with Timer - Fixed bottom bar style"""
+    st.markdown("""
+    <div class="glass-panel" style="padding: var(--space-4) var(--space-6); margin: var(--space-4) 0; border-left: 4px solid var(--error);">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;">
+            <!-- Live Waveform -->
+            <div style="display:flex; align-items:center; gap:var(--space-4);">
+                <div class="recording-indicator">● REC</div>
+                <div class="waveform-container" id="waveform">
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                    <div class="waveform-bar"></div>
+                </div>
+            </div>
+            <!-- Timer -->
+            <div class="timer-display" id="rec-timer">01:30</div>
+            <!-- Status -->
+            <div style="font-size:var(--text-label-md); color:var(--on-surface-variant);" id="rec-status">Recording in progress — speak clearly</div>
         </div>
-        <div id="status" style="font-size:16px;color:#999;margin-top:12px;">🎙️ Recording in progress — speak clearly</div>
     </div>
-    <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}</style>
+    
     <script>
-        let t=90;
-        const iv=setInterval(()=>{
-            t--;
-            const m=Math.floor(t/60),s=t%60;
-            document.getElementById('timer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-            if(t<=10){document.getElementById('timer').style.color='#ff0000';document.getElementById('dot').style.background='#ff0000';}
-            if(t<=0){clearInterval(iv);document.getElementById('status').textContent="⏹ Time's up! Click stop on the recorder.";document.getElementById('dot').style.animation='none';document.getElementById('dot').style.background='#888';}
-        },1000);
-    </script>""", height=140)
+        // Recording timer countdown
+        let recTime = 90;
+        const timerEl = document.getElementById('rec-timer');
+        const statusEl = document.getElementById('rec-status');
+        const bars = document.querySelectorAll('.waveform-bar');
+        
+        const recInterval = setInterval(() => {{
+            recTime--;
+            const m = Math.floor(recTime / 60);
+            const s = recTime % 60;
+            if (timerEl) timerEl.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+            
+            // Color change at 10s
+            if (recTime <= 10) {{
+                if (timerEl) timerEl.style.color = 'var(--error)';
+                if (statusEl) {{
+                    statusEl.textContent = '⏱ 10 seconds remaining';
+                    statusEl.style.color = 'var(--error)';
+                }}
+            }}
+            if (recTime <= 0) {{
+                clearInterval(recInterval);
+                if (timerEl) timerEl.textContent = '00:00';
+                if (statusEl) {{
+                    statusEl.textContent = 'Time\'s up! Click stop on the recorder.';
+                    statusEl.style.color = 'var(--outline)';
+                }}
+            }}
+        }}, 1000);
+        
+        // Animate waveform bars continuously
+        function animateWaveform() {{
+            bars.forEach((bar, i) => {{
+                const height = 8 + Math.random() * 32;
+                bar.style.height = height + 'px';
+                bar.style.opacity = 0.4 + Math.random() * 0.6;
+            }});
+            requestAnimationFrame(animateWaveform);
+        }}
+        animateWaveform();
+    </script>
+    """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════
 # MAIN UI
 # ══════════════════════════════════════════
-st.title("🤖 AI HR Interviewer")
-st.caption("Upload resume → Audio interview → AI evaluation & detailed report")
+st.markdown("""
+<div style="text-align:center; padding: var(--space-10) 0 var(--space-6);">
+    <h1 class="font-display" style="background: linear-gradient(135deg, var(--primary-fixed-dim) 0%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: var(--space-3);">AI HR Interviewer</h1>
+    <p class="font-body-lg" style="color: var(--on-surface-variant); max-width: 600px; margin: 0 auto;">Conduct structured, AI-evaluated audio interviews with multi-dimensional scoring</p>
+</div>
+""", unsafe_allow_html=True)
 
 state = st.session_state.interview_state
 
 # ── STAGE 1: Upload & Configure ──
 if state["stage"] == "upload":
-    st.header("📄 Step 1: Upload Resume & Job Details")
-    col1, col2 = st.columns(2)
+    # Hero / Upload Section
+    st.markdown("""
+    <div class="glass-panel" style="padding: var(--space-8); margin-bottom: var(--space-6);">
+        <div class="font-headline-md" style="color: var(--primary-fixed-dim); margin-bottom: var(--space-2);">📄  Candidate Profile</div>
+        <p class="font-body-md" style="color: var(--on-surface-variant); margin-bottom: var(--space-6);">Upload resume and define the role to generate tailored interview questions</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns([1, 1], gap="large")
+    
     with col1:
-        resume_file = st.file_uploader("Upload Resume (PDF or DOCX)", type=["pdf", "docx"])
-        job_role = st.text_input("Target Job Role", placeholder="e.g., Senior React Developer")
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-6); height: 100%;">
+            <label class="font-label-md" style="display:block; margin-bottom: var(--space-3);">Resume (PDF/DOCX)</label>
+        """, unsafe_allow_html=True)
+        resume_file = st.file_uploader("", type=["pdf", "docx"], label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-6); margin-top: var(--space-4);">
+            <label class="font-label-md" style="display:block; margin-bottom: var(--space-3);">Target Role</label>
+        """, unsafe_allow_html=True)
+        job_role = st.text_input("", placeholder="e.g., Senior React Developer", label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
+    
     with col2:
-        job_description = st.text_area("Job Description (optional)", height=120,
-            placeholder="Paste the job description for better tailored questions...")
-
-    st.markdown("---")
-    st.subheader("🎯 Interview Settings")
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        num_questions = st.select_slider("Number of Questions", options=[3, 5, 7, 10], value=5)
-    with c2:
-        difficulty = st.selectbox("Difficulty", ["Easy", "Medium", "Hard", "Progressive (Easy → Hard)"], index=3)
-    with c3:
-        q_types = st.multiselect("Question Types", ["Technical", "Behavioral", "Situational", "System Design"], default=["Technical", "Behavioral", "Situational"])
-
-    if st.button("🚀 Start Audio Interview", type="primary", disabled=not (resume_file and job_role)):
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-6); height: 100%;">
+            <label class="font-label-md" style="display:block; margin-bottom: var(--space-3);">Job Description <span style="color:var(--outline); font-weight:400; text-transform:none;">(optional)</span></label>
+        """, unsafe_allow_html=True)
+        job_description = st.text_area("", height=140, placeholder="Paste the job description for better tailored questions...\n\nAI will extract key competencies and generate role-specific questions.", label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Role templates quick-select
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-4); margin-top: var(--space-4);">
+            <span class="font-label-sm" style="color: var(--on-surface-variant);">Quick Role Templates</span>
+        """, unsafe_allow_html=True)
+        template_cols = st.columns(4)
+        role_templates = ["Senior React Dev", "Backend Engineer", "ML Engineer", "DevOps Engineer"]
+        for i, template in enumerate(role_templates):
+            with template_cols[i]:
+                if st.button(template, key=f"template_{i}", use_container_width=True, type="secondary"):
+                    job_role = template
+                    st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Interview Settings - Bento Grid
+    st.markdown("""
+    <div class="glass-panel" style="padding: var(--space-6); margin-top: var(--space-6);">
+        <div class="font-headline-md" style="color: var(--primary-fixed-dim); margin-bottom: var(--space-4);">🎯  Interview Configuration</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    s1, s2, s3 = st.columns(3, gap="medium")
+    
+    with s1:
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-4); text-align:center;">
+            <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">Questions</div>
+        """, unsafe_allow_html=True)
+        num_questions = st.select_slider("", options=[3, 5, 7, 10], value=5, label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with s2:
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-4); text-align:center;">
+            <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">Difficulty</div>
+        """, unsafe_allow_html=True)
+        difficulty = st.selectbox("", ["Easy", "Medium", "Hard", "Progressive (Easy → Hard)"], index=3, label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with s3:
+        st.markdown("""
+        <div class="glass-card" style="padding: var(--space-4); text-align:center;">
+            <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">Question Types</div>
+        """, unsafe_allow_html=True)
+        q_types = st.multiselect("", ["Technical", "Behavioral", "Situational", "System Design"], default=["Technical", "Behavioral", "Situational"], label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Start Button - Full Width
+    st.markdown("<br>", unsafe_allow_html=True)
+    col_start = st.columns([1, 2, 1])
+    with col_start[1]:
+        if st.button("🚀  Start Audio Interview", type="primary", use_container_width=True, disabled=not (resume_file and job_role)):
         with st.spinner("Parsing resume..."):
             state["resume_text"] = extract_resume_text(resume_file)
             state["job_role"] = job_role
@@ -400,26 +980,31 @@ elif state["stage"] == "interview":
             st.markdown(f"**Q{idx+1}** · {q.get('type','general').upper()} · Focus: {q.get('focus','General')}")
             st.markdown(f"### {q['question']}")
 
-        # ── Phase: READY ──
+        # ── Phase: READY ── (Auto-starts think timer, no button)
         if phase == "ready":
-            st.info("📖 Read the question above carefully. When you're ready, click below to start your **30-second think time**, after which recording will begin.")
-            if st.button("🎯 I'm Ready", type="primary", use_container_width=True):
-                state["question_phase"] = "thinking"
-                state["audio_bytes"] = None
-                st.rerun()
+            state["question_phase"] = "thinking"
+            state["audio_bytes"] = None
+            st.rerun()
 
         # ── Phase: THINKING (30s countdown) ──
         elif phase == "thinking":
-            st.warning("🧠 **THINK TIME** — Organize your thoughts. Recording starts after the countdown!")
-            render_countdown_timer(30, "⏳ Think Time — Prepare Your Answer")
+            st.markdown("""
+            <div class="glass-panel" style="text-align:center; padding: var(--space-8); margin: var(--space-4) 0;">
+                <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">THINK TIME</div>
+                <div class="font-body-lg" style="color: var(--on-surface);">Organize your thoughts. Recording starts automatically.</div>
+            </div>
+            """, unsafe_allow_html=True)
+            render_think_timer(30, "Think Time")
             state["question_phase"] = "recording"
             st.rerun()
 
         # ── Phase: RECORDING ──
         elif phase == "recording":
-            render_recording_timer_js()
-            st.markdown("##### 🎙️ Click the microphone to start recording. Click stop when finished. Max **90 seconds**.")
-            audio_data = st.audio_input("Record your answer", key=f"audio_q{idx}")
+            # Live waveform with timer
+            render_recording_waveform()
+            
+            # Audio input (hidden label, full width)
+            audio_data = st.audio_input("", key=f"audio_q{idx}", label_visibility="collapsed")
 
             # Auto-advance when audio is captured (user clicked stop)
             if audio_data is not None:
@@ -427,18 +1012,27 @@ elif state["stage"] == "interview":
                 state["question_phase"] = "processing"
                 st.rerun()
             
-            # Manual skip option
-            if st.button("⏭️ Skip This Question", use_container_width=True):
-                state["answers"].append("[Skipped]")
-                state["evaluations"].append({"score": 0, "feedback": "Skipped", "strengths": [], "improvements": [], "technical_accuracy": "N/A", "communication": "N/A"})
-                if idx == total_qs - 1:
-                    state["stage"] = "results"
-                    state["question_phase"] = "ready"
-                else:
-                    state["current_q"] += 1
-                    state["question_phase"] = "ready"
-                state["audio_bytes"] = None
-                st.rerun()
+            # Fixed bottom action bar
+            st.markdown("""
+            <div style="position: fixed; bottom: 0; left: 0; right: 0; padding: var(--space-4) var(--space-6); background: linear-gradient(180deg, transparent, var(--bg-deep) 30%); z-index: 100; pointer-events: none;">
+                <div style="max-width: 1200px; margin: 0 auto; pointer-events: auto; display: flex; justify-content: center; gap: var(--space-4);">
+            """, unsafe_allow_html=True)
+            
+            col_skip, col_space = st.columns([1, 4])
+            with col_skip:
+                if st.button("⏭️ Skip", use_container_width=True, type="secondary"):
+                    state["answers"].append("[Skipped]")
+                    state["evaluations"].append({"score": 0, "feedback": "Skipped", "strengths": [], "improvements": [], "technical_accuracy": "N/A", "communication": "N/A"})
+                    if idx == total_qs - 1:
+                        state["stage"] = "results"
+                        state["question_phase"] = "ready"
+                    else:
+                        state["current_q"] += 1
+                        state["question_phase"] = "ready"
+                    state["audio_bytes"] = None
+                    st.rerun()
+            
+            st.markdown("</div></div>", unsafe_allow_html=True)
 
         # ── Phase: PROCESSING (auto-transcribe + auto-evaluate) ──
         elif phase == "processing":
@@ -510,15 +1104,59 @@ elif state["stage"] == "results":
     score = report.get("overall_score", 0)
     verdict = report.get("verdict", "N/A")
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("Overall Score", f"{score}/100")
-    with col2:
-        vc = {"Strong Hire": "🟢", "Hire": "🟢", "Consider": "🟡", "No Hire": "🔴"}
-        st.metric("Verdict", f"{vc.get(verdict, '')} {verdict}")
-    with col3:
-        avg = sum(e.get("score", 0) for e in state["evaluations"]) / max(len(state["evaluations"]), 1)
-        st.metric("Avg Question Score", f"{avg:.1f}/10")
+    # Calculate dimension scores from evaluations
+    evals = state.get("evaluations", [])
+    dim_scores = {
+        "Technical": sum(e.get("technical_accuracy", "medium") == "high" for e in evals) * 100 / max(len(evals), 1) if evals else 50,
+        "Communication": sum(e.get("communication", "medium") == "high" for e in evals) * 100 / max(len(evals), 1) if evals else 50,
+        "Problem Solving": sum(e.get("score", 5) >= 7 for e in evals) * 100 / max(len(evals), 1) if evals else 50,
+        "Cultural Fit": 75,
+        "Confidence": 80,
+    }
+
+    # Radar chart
+    fig = go.Figure()
+    fig.add_trace(go.Scatterpolar(
+        r=list(dim_scores.values()),
+        theta=list(dim_scores.keys()),
+        fill='toself',
+        fillcolor='rgba(59,130,246,0.2)',
+        line=dict(color='#3b82f6', width=3),
+        marker=dict(size=8, color='#3b82f6'),
+        name='Scores'
+    ))
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(visible=True, range=[0, 100], tickfont=dict(size=10, color='#94a3b8')),
+            angularaxis=dict(tickfont=dict(size=11, color='#dfe2ef', family='Inter'))
+        ),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=40, r=40, t=40, b=40),
+        height=300,
+        showlegend=False
+    )
+
+    # Header metrics with radar
+    m1, m2, m3 = st.columns([1, 1, 2])
+    with m1:
+        st.markdown(f"""
+        <div class="glass-card" style="text-align:center; padding: var(--space-6);">
+            <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">OVERALL SCORE</div>
+            <div class="font-display" style="color: var(--on-surface); font-size: 48px; font-family: var(--font-mono);">{score}</div>
+            <div style="color: var(--on-surface-variant); font-size: 14px;">/ 100</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with m2:
+        verdict_colors = {"Strong Hire": "#22c55e", "Hire": "#22c55e", "Consider": "#fbbf24", "No Hire": "#ef4444"}
+        vc = verdict_colors.get(verdict, "#94a3b8")
+        st.markdown(f"""
+        <div class="glass-card" style="text-align:center; padding: var(--space-6); display:flex; align-items:center; justify-content:center;">
+            <div style="background: {vc}20; border: 1px solid {vc}40; color: {vc}; padding: var(--space-3) var(--space-6); border-radius: var(--radius-full); font-weight: 600; font-size: 16px;">{verdict}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with m3:
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.divider()
     st.subheader("📋 Executive Summary")

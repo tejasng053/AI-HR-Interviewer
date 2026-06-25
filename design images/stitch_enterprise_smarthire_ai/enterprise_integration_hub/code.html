@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Enterprise Integration Hub - HireFlow AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#5c0008",
+                    "on-error": "#690005",
+                    "surface-container-low": "#181b25",
+                    "primary": "#adc6ff",
+                    "secondary-container": "#e3aa00",
+                    "background": "#0f131c",
+                    "inverse-primary": "#005ac2",
+                    "secondary-fixed-dim": "#f9bd22",
+                    "error-container": "#93000a",
+                    "primary-container": "#4d8eff",
+                    "surface-dim": "#0f131c",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-tint": "#adc6ff",
+                    "surface-variant": "#31353f",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "secondary": "#ffc640",
+                    "on-tertiary": "#68000a",
+                    "surface-container": "#1c1f29",
+                    "surface-bright": "#353943",
+                    "on-tertiary-fixed": "#410004",
+                    "outline": "#8c909f",
+                    "on-primary-fixed": "#001a42",
+                    "surface": "#0f131c",
+                    "surface-container-highest": "#31353f",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-secondary-fixed": "#261a00",
+                    "on-primary": "#002e6a",
+                    "tertiary-fixed": "#ffdad7",
+                    "secondary-fixed": "#ffdf9f",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-container-lowest": "#0a0e17",
+                    "tertiary": "#ffb3ad",
+                    "outline-variant": "#424754",
+                    "on-secondary": "#402d00",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "on-primary-container": "#00285d",
+                    "on-secondary-container": "#5a4100",
+                    "on-surface-variant": "#c2c6d6",
+                    "on-secondary-fixed-variant": "#5c4300",
+                    "on-background": "#dfe2ef",
+                    "inverse-surface": "#dfe2ef",
+                    "on-surface": "#dfe2ef",
+                    "surface-container-high": "#262a34",
+                    "inverse-on-surface": "#2c303a",
+                    "tertiary-container": "#ff5451"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "64px",
+                    "container-max": "1200px",
+                    "margin-mobile": "16px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "headline-xl": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-xl": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ambient-shadow {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.surface-variant');
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline');
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopNavBar component -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 max-w-container-max mx-auto border-b border-white/5 bg-surface/80 backdrop-blur-xl shadow-sm">
+<div class="flex items-center gap-8">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">
+                HireFlow AI
+            </div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">
+                    Dashboard
+                </a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">
+                    Interviews
+                </a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">
+                    Reports
+                </a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">
+                    Integrations
+                </a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-200 scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 ml-2">
+<img alt="HR Executive Profile" class="w-full h-full object-cover" data-alt="Professional headshot of an HR Executive. High quality, corporate lighting, isolated on a dark background. Formal attire, conveying trust and authority. Modern enterprise aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY-LRIZBTVgk_vLsG6A-pCv7slSrB1ZL7EtQjq8OiJ7cJaXhewkC5ZXh6HYSZJLmaNSGiQhFb3rYk29T3Bj6tVUM4fe6zWX2wpBJJ_Oz43DP0295Do3EeVbSbIelriue7noI21lUazZvpNJ_J0OwX2EHbVYjE_8LfpwBQ6DyeK784VyHHqgvXErsTQddFXH8HhlTuqsxIYLUbP9-Tmk52SMTv41I0OsQPX0zzLSSpOR6xf2WWyqYIzdk8KHB3PJkLOvGhLn7d12GqE"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex w-full max-w-container-max mx-auto mt-16 relative">
+<!-- SideNavBar component (Web only as per logic, hidden on mobile) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full p-4 border-r border-white/5 bg-surface-container-low shadow-lg docked left-0 h-full w-64 z-40 pt-20">
+<div class="mb-8 px-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-container-high flex items-center justify-center border border-white/5">
+<img alt="Enterprise Logo" class="w-8 h-8 object-contain" data-alt="Abstract enterprise technology logo. Sharp geometric shapes, glowing blue accents on a dark navy background. Professional, high-end corporate branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXph8XQwzTszkS-VfW4z0hwtMD7InJi0KObJx2OqIx0GWs4iyHD2RL6EIpxVvJvhWdrrCkJRez4OVpRr0RydOjUWt5oL6Ot13ij1HiGuS3Wz1uGIDttOHzA6ExAOk3onWXP8vLlQoLQPmdLh9mAjyg4ftG7JMxCEWCxjSa_O1HPB0nGOGFocOuZYvqJHi6X5PvBL_Wo65qGorJrHhdHocuTIVi_Qb4DcrjvT109wtafsJDyGUVMb0pNk7uqo_1_cbsZYq8uS97qJaY"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary text-base leading-tight">Enterprise Portal</h2>
+<p class="text-on-surface-variant font-label-sm text-label-sm">HR Admin View</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-all font-label-md text-label-md rounded-full" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Home
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-all font-label-md text-label-md rounded-full" href="#">
+<span class="material-symbols-outlined">workspaces</span>
+                    Campaigns
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-all font-label-md text-label-md rounded-full" href="#">
+<span class="material-symbols-outlined">group</span>
+                    Candidates
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 transition-all font-label-md text-label-md rounded-full" href="#">
+<span class="material-symbols-outlined">insights</span>
+                    Analytics
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</nav>
+<div class="mt-auto flex flex-col gap-2 border-t border-white/5 pt-4">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">contact_support</span>
+                    Support
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-error transition-colors font-label-sm text-label-sm" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+                    Logout
+                </a>
+</div>
+</aside>
+<!-- Canvas Area -->
+<main class="flex-1 px-margin-mobile md:px-margin-desktop py-8 md:ml-64 overflow-y-auto">
+<header class="mb-10">
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">Integration Hub</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Configure your enterprise workspace, manage API access, and customize the AI interviewer persona to match your brand identity.</p>
+</header>
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column (Wider) -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<!-- API Access Card -->
+<section class="glass-panel rounded-xl p-6 ambient-shadow hover:scale-[1.01] transition-transform duration-300">
+<div class="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">api</span>
+                                API Access
+                            </h2>
+<span class="px-2 py-1 bg-primary/10 text-primary rounded font-label-sm text-label-sm border border-primary/20">Active</span>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-high rounded-lg p-4 border border-white/5">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Production API Key</label>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface-container-lowest border border-white/10 rounded-md px-3 py-2 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md" readonly="" type="password" value="sk_test_dummy_key_value_1234567890abcdef"/>
+<button class="px-4 py-2 bg-surface-variant hover:bg-surface-bright text-on-surface rounded-md border border-white/10 transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">content_copy</span>
+</button>
+</div>
+<p class="mt-2 text-xs text-on-surface-variant">Last rotated: 45 days ago</p>
+</div>
+<div class="bg-surface-container-high rounded-lg p-4 border border-white/5">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Webhook URL</label>
+<input class="w-full bg-surface-container-lowest border border-white/10 rounded-md px-3 py-2 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md" placeholder="https://api.yourcompany.com/webhooks/hireflow" type="text"/>
+</div>
+</div>
+</section>
+<!-- AI Personality Settings -->
+<section class="glass-panel rounded-xl p-6 ambient-shadow hover:scale-[1.01] transition-transform duration-300">
+<div class="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+                                AI Interviewer Persona
+                            </h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-3">Tone</label>
+<div class="space-y-2">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-primary/30 bg-primary/5 cursor-pointer">
+<input checked="" class="form-radio text-primary bg-surface-container-lowest border-white/20 focus:ring-primary" name="tone" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface">Professional &amp; Formal</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-white/5 bg-surface-container-lowest cursor-pointer hover:border-white/20 transition-colors">
+<input class="form-radio text-primary bg-surface-container-lowest border-white/20 focus:ring-primary" name="tone" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface">Warm &amp; Empathetic</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-white/5 bg-surface-container-lowest cursor-pointer hover:border-white/20 transition-colors">
+<input class="form-radio text-primary bg-surface-container-lowest border-white/20 focus:ring-primary" name="tone" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface">Direct &amp; Technical</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-3">Pacing (Questions per minute)</label>
+<input class="w-full accent-primary" max="5" min="1" type="range" value="3"/>
+<div class="flex justify-between mt-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>Relaxed</span>
+<span>Standard</span>
+<span>Rapid</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column (Narrower) -->
+<div class="flex flex-col gap-6">
+<!-- Custom Branding -->
+<section class="glass-panel rounded-xl p-6 ambient-shadow hover:scale-[1.01] transition-transform duration-300">
+<div class="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">palette</span>
+                                Branding
+                            </h2>
+</div>
+<div class="space-y-6">
+<!-- Logo Upload -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Company Logo</label>
+<div class="border-2 border-dashed border-white/10 rounded-lg p-6 flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors mb-2 text-3xl">cloud_upload</span>
+<span class="font-label-md text-label-md text-on-surface">Drag &amp; drop or browse</span>
+<span class="text-xs text-on-surface-variant mt-1">SVG, PNG up to 2MB</span>
+</div>
+</div>
+<!-- Color Pickers -->
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-3">Brand Colors</label>
+<div class="flex items-center gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-2 p-2 rounded border border-white/10 bg-surface-container-highest">
+<div class="w-6 h-6 rounded bg-[#0f62fe] border border-white/20"></div>
+<span class="font-body-md text-body-md text-on-surface font-mono text-sm">#0f62fe</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2 p-2 rounded border border-white/10 bg-surface-container-highest">
+<div class="w-6 h-6 rounded bg-[#ffffff] border border-white/20"></div>
+<span class="font-body-md text-body-md text-on-surface font-mono text-sm">#ffffff</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-4 border-t border-white/5">
+<button class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg hover:bg-primary/90 transition-colors font-label-md text-label-md shadow-[0_0_15px_rgba(173,198,255,0.3)]">
+                                Save Changes
+                            </button>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</body></html>
