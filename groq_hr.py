@@ -129,8 +129,8 @@ Grade this answer. Return JSON:
     def generate_final_report(self, role: str, resume: str, qa_pairs: List[Dict]) -> Dict:
         system = "You are a Senior HR Director. Return ONLY valid JSON."
         qa_text = "\n".join([
-            f"Q: {q['question']}\nA: {a['answer']}\nScore: {a['evaluation'].get('score', 'N/A')}/10"
-            for q, a in qa_pairs
+            f"Q: {pair.get('question', '')}\nA: {pair.get('answer', '')}\nScore: {pair.get('evaluation', {}).get('score', 'N/A')}/10"
+            for pair in qa_pairs
         ])
         user = f"""Role: {role}
 Resume Summary: {resume[:2000]}
@@ -152,7 +152,7 @@ Return JSON:
         parsed = self.extract_json(result)
         if parsed:
             return parsed
-        avg = sum(a['evaluation'].get('score', 5) for a in qa_pairs) / max(len(qa_pairs), 1)
+        avg = sum(a.get('evaluation', {}).get('score', 5) for a in qa_pairs) / max(len(qa_pairs), 1)
         return {
             "overall_score": int(avg * 10),
             "verdict": "Consider",
