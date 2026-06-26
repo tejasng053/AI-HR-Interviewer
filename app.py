@@ -27,6 +27,8 @@ try:
 except ImportError:
     LocalGroqHR = None
 
+proctor_feed = components.declare_component("proctoring", path="proctoring_component")
+
 st.set_page_config(
     page_title="AI HR Interviewer",
     page_icon="🤖",
@@ -1488,17 +1490,30 @@ elif state["stage"] == "interview":
         cam_col, q_col = st.columns([3, 2])
 
         with cam_col:
-            # Camera feed container
+            # Camera feed container with eye-tracking
             st.markdown(
                 '<div class="camera-container">',
                 unsafe_allow_html=True,
             )
-            cam_data = st.camera_input(
-                "Camera Check",
-                key=f"cam_q{idx}_{phase}",
-                label_visibility="collapsed",
-            )
+            warnings = proctor_feed(key=f"proctor_q{idx}_{phase}")
             st.markdown("</div>", unsafe_allow_html=True)
+
+            if warnings is not None:
+                if warnings >= 3:
+                    st.error("🚨 Interview ended due to repeated off-screen looking.")
+                    # Force end interview
+                    remaining = total_qs - len(state["answers"])
+                    for _ in range(remaining):
+                        state["answers"].append("[Skipped due to proctoring violation]")
+                        state["evaluations"].append(
+                            {"score": 0, "feedback": "Interview terminated due to multiple proctoring warnings (looking away from camera).", "strengths": [], "improvements": [], "technical_accuracy": "N/A", "communication": "N/A"}
+                        )
+                    state["stage"] = "results"
+                    state["question_phase"] = "ready"
+                    state["audio_bytes"] = None
+                    st.rerun()
+                elif warnings > 0:
+                    st.warning(f"⚠️ Warning {warnings}/3: Please keep your eyes on the camera.")
 
             # Interview Tips panel
             st.markdown(
