@@ -538,24 +538,43 @@ with st.sidebar:
     """,
         unsafe_allow_html=True,
     )
-    st.header("⚙️ Configuration")
-    _default_key = "gsk_3iGf5qrzLnCoAFwK" + "dLs0WGdyb3FYIRUAIeulh1bdubtSZHZIMQXI"
-    groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...", value=_default_key)
 
+    # Minimal sidebar — just connection status
+    backend = st.session_state.get("current_backend", "None")
+    st.caption(f"Backend: {backend}")
+    if st.session_state.get("ai_hr"):
+        st.success("✅ AI Connected")
+    else:
+        st.warning("⚠️ AI Offline")
+
+# ── API Key + Backend (shown on first page only) ──
+_default_key = "gsk_3iGf5qrzLnCoAFwK" + "dLs0WGdyb3FYIRUAIeulh1bdubtSZHZIMQXI"
+state = st.session_state.get("interview_state", {})
+if state.get("stage", "upload") == "upload":
+    with st.expander("🔑 API Configuration", expanded=not st.session_state.get("ai_hr")):
+        cfg_col1, cfg_col2 = st.columns([2, 1])
+        with cfg_col1:
+            groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...", value=_default_key)
+        with cfg_col2:
+            available_backends = []
+            if LocalGroqHR:
+                available_backends.append("Groq Cloud API (Llama 3.3 70B)")
+            if SuperAIHR:
+                available_backends.append("Local Qwen-2.5-7B (GPU)")
+            if not available_backends:
+                backend_choice = st.selectbox("AI Backend", ["Mock Mode (No AI)"])
+            else:
+                backend_choice = st.selectbox("AI Backend", available_backends)
+else:
+    groq_key = _default_key
     available_backends = []
     if LocalGroqHR:
         available_backends.append("Groq Cloud API (Llama 3.3 70B)")
     if SuperAIHR:
         available_backends.append("Local Qwen-2.5-7B (GPU)")
-    if not available_backends:
-        backend_choice = st.selectbox("AI Backend", ["Mock Mode (No AI)"])
-    else:
-        backend_choice = st.selectbox("AI Backend", available_backends)
+    backend_choice = available_backends[0] if available_backends else "Mock Mode (No AI)"
 
-    st.divider()
-    st.subheader("🎙️ Transcription")
-    st.info("Using Groq Whisper (Cloud) — Fast & Accurate")
-    audio_backend = "Groq Whisper (Cloud)"
+audio_backend = "Groq Whisper (Cloud)"
 
 # ── Backend Connection ──
 if (
@@ -1722,38 +1741,5 @@ NEXT STEPS:\n{report.get('next_steps','')}
         }
         st.rerun()
 
-# ── Sidebar Info ──
-with st.sidebar:
-    st.header("ℹ️ About")
-    st.markdown(
-        """
-    <div style="font-size:13px; color:var(--on-surface-variant); line-height:1.7;">
-    <strong style="color:var(--on-surface);">Audio-First AI Interviewer</strong><br>
-    📄 Resume parsing (PDF/DOCX)<br>
-    🎯 Role-specific question generation<br>
-    ⏳ 30s think time per question<br>
-    🎙️ 90s audio recording per answer<br>
-    🔄 Auto-transcription via Groq Whisper<br>
-    🤖 Real-time AI evaluation<br>
-    📊 Comprehensive report with verdict
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
-    st.divider()
-    backend = st.session_state.get("current_backend", "None")
-    st.caption(f"Backend: {backend}")
-    if st.session_state.get("ai_hr"):
-        st.success("✅ AI Connected")
-    else:
-        st.warning("⚠️ AI Offline — Add Groq API Key to enable")
 
-    st.markdown(
-        """
-    <div style="position:fixed; bottom:16px; left:16px; display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--outline);">
-        <span>🛟 Support</span>
-        <span>🚪 Logout</span>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
+
