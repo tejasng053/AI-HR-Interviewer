@@ -539,12 +539,12 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
     st.header("⚙️ Configuration")
-    _default_key = "gsk_KpEJiO9CxQJI" + "j9oon15RWGdyb3FYV2ig8Ioz7LtOufHu2NbDWkrH"
+    _default_key = "gsk_3iGf5qrzLnCoAFwK" + "dLs0WGdyb3FYIRUAIeulh1bdubtSZHZIMQXI"
     groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...", value=_default_key)
 
     available_backends = []
     if LocalGroqHR:
-        available_backends.append("Groq Cloud API (Llama 3.1 70B)")
+        available_backends.append("Groq Cloud API (Llama 3.3 70B)")
     if SuperAIHR:
         available_backends.append("Local Qwen-2.5-7B (GPU)")
     if not available_backends:
@@ -566,7 +566,7 @@ if (
     st.session_state.current_backend = backend_choice
     st.session_state.last_groq_key = groq_key
 
-    if backend_choice == "Groq Cloud API (Llama 3.1 70B)":
+    if backend_choice == "Groq Cloud API (Llama 3.3 70B)":
         with st.spinner("Connecting to Groq API..."):
             try:
                 kwargs = {}

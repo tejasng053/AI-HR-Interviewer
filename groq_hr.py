@@ -4,7 +4,7 @@ import re
 from typing import Dict, List, Any, Optional
 from groq import Groq
 
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "gsk_KpEJiO9CxQJI" + "j9oon15RWGdyb3FYV2ig8Ioz7LtOufHu2NbDWkrH")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "gsk_3iGf5qrzLnCoAFwK" + "dLs0WGdyb3FYIRUAIeulh1bdubtSZHZIMQXI")
 MODEL = "llama-3.3-70b-versatile"
 
 class GroqHR:
