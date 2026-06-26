@@ -649,17 +649,17 @@ hr {
 
 # ── Top Navbar (replaces sidebar) ──
 _ai_connected = st.session_state.get("ai_hr") is not None
-_status_class = "connected" if _ai_connected else "offline"
-_status_text = "AI CONNECTED" if _ai_connected else "AI OFFLINE"
-_status_dot = "🟢" if _ai_connected else "🔴"
 _current_stage = st.session_state.get("interview_state", {}).get("stage", "upload")
-_rec_badge = ""
-if _current_stage == "interview":
-    _rec_badge = '<span class="status-pill recording">● REC</span>'
 
-st.markdown(
-    f"""
-<div class="top-navbar">
+_navbar_right = ""
+if _current_stage == "interview":
+    _navbar_right += '<span class="status-pill recording">● REC</span>'
+if _ai_connected:
+    _navbar_right += '<span class="status-pill connected">🟢 AI CONNECTED</span>'
+else:
+    _navbar_right += '<span class="status-pill offline">🔴 AI OFFLINE</span>'
+
+_navbar_html = """<div class="top-navbar">
     <div class="navbar-brand">
         <div class="logo"><div class="logo-inner"></div></div>
         <div>
@@ -667,14 +667,10 @@ st.markdown(
             <div style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:var(--primary); letter-spacing:0.05em; text-transform:uppercase; line-height:1; margin-top:2px;">ENTERPRISE INTERVIEWER</div>
         </div>
     </div>
-    <div class="navbar-status">
-        {_rec_badge}
-        <span class="status-pill {_status_class}">{_status_dot} {_status_text}</span>
-    </div>
-</div>
-""",
-    unsafe_allow_html=True,
-)
+    <div class="navbar-status">""" + _navbar_right + """</div>
+</div>"""
+
+st.markdown(_navbar_html, unsafe_allow_html=True)
 
 # ── API Key + Backend (shown on upload page only) ──
 _default_key = "gsk_3iGf5qrzLnCoAFwK" + "dLs0WGdyb3FYIRUAIeulh1bdubtSZHZIMQXI"
