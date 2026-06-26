@@ -31,7 +31,7 @@ st.set_page_config(
     page_title="AI HR Interviewer",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # Custom CSS - Executive Zenith Design System
@@ -462,31 +462,154 @@ div[data-testid="stMetricValue"] {
     box-shadow: var(--shadow-glow-primary);
 }
 
-/* Sidebar */
+/* Hide Sidebar Completely */
 section[data-testid="stSidebar"] {
-    background: #080808 !important;
-    border-right: 1px solid var(--border) !important;
+    display: none !important;
 }
 
-section[data-testid="stSidebar"] .stSelectbox > div > div {
-    background: var(--surface-elevated) !important;
+button[data-testid="stSidebarCollapsedControl"],
+button[data-testid="baseButton-header"] {
+    display: none !important;
 }
 
-section[data-testid="stSidebar"] h1,
-section[data-testid="stSidebar"] h2,
-section[data-testid="stSidebar"] h3 {
+/* Top Navbar */
+.top-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    margin: -24px -24px 24px -24px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-brand .logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(255,107,0,0.4);
+}
+
+.navbar-brand .logo-inner {
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 4px;
+}
+
+.navbar-status {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-pill.connected {
+    background: rgba(34,197,94,0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34,197,94,0.3);
+}
+
+.status-pill.offline {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239,68,68,0.3);
+}
+
+.status-pill.recording {
+    background: rgba(255,107,0,0.15);
+    color: var(--primary);
+    border: 1px solid rgba(255,107,0,0.3);
+    animation: pulse-ring 2s ease-in-out infinite;
+}
+
+/* Camera Feed */
+.camera-container {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000;
+    position: relative;
+}
+
+.camera-container img,
+.camera-container video {
+    width: 100%;
+    border-radius: var(--radius-lg);
+}
+
+.camera-overlay {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.camera-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Interview Tips */
+.tips-panel {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-top: 16px;
+}
+
+.tips-panel h4 {
+    font-size: 14px !important;
+    text-transform: none !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
     color: var(--primary) !important;
-    font-size: 16px !important;
-    letter-spacing: -0.01em !important;
+    margin-bottom: 12px !important;
 }
 
-section[data-testid="stSidebar"] [data-testid="stMarkdown"] p {
-    font-size: 13px !important;
-    color: var(--on-surface-variant) !important;
-}
-
-section[data-testid="stSidebar"] .stDivider {
-    border-color: var(--border) !important;
+.tips-panel li {
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    margin-bottom: 6px;
+    line-height: 1.5;
 }
 
 /* Dividers */
@@ -524,34 +647,40 @@ hr {
     unsafe_allow_html=True,
 )
 
-# ── Sidebar: Configuration ──
-with st.sidebar:
-    st.markdown(
-        """
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.06);">
-        <div style="width:40px; height:40px; border-radius:8px; background:var(--primary); display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);"><div style="width:22px; height:22px; background:#fff; border-radius:4px;"></div></div>
-        <div style="display:flex; flex-direction:column; justify-content:center; gap:2px;">
-            <div style="font-family:'Sora', sans-serif; font-size:18px; font-weight:800; font-style:italic; color:#fff; text-transform:uppercase; letter-spacing:-0.02em; line-height:1;">HIREFLOW</div>
-            <div style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700; color:var(--primary); letter-spacing:0.05em; text-transform:uppercase; line-height:1;">ENTERPRISE</div>
+# ── Top Navbar (replaces sidebar) ──
+_ai_connected = st.session_state.get("ai_hr") is not None
+_status_class = "connected" if _ai_connected else "offline"
+_status_text = "AI CONNECTED" if _ai_connected else "AI OFFLINE"
+_status_dot = "🟢" if _ai_connected else "🔴"
+_current_stage = st.session_state.get("interview_state", {}).get("stage", "upload")
+_rec_badge = ""
+if _current_stage == "interview":
+    _rec_badge = '<span class="status-pill recording">● REC</span>'
+
+st.markdown(
+    f"""
+<div class="top-navbar">
+    <div class="navbar-brand">
+        <div class="logo"><div class="logo-inner"></div></div>
+        <div>
+            <div style="font-family:'Sora',sans-serif; font-size:16px; font-weight:800; font-style:italic; color:#fff; text-transform:uppercase; letter-spacing:-0.02em; line-height:1;">HIREFLOW</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:var(--primary); letter-spacing:0.05em; text-transform:uppercase; line-height:1; margin-top:2px;">ENTERPRISE INTERVIEWER</div>
         </div>
     </div>
-    """,
-        unsafe_allow_html=True,
-    )
+    <div class="navbar-status">
+        {_rec_badge}
+        <span class="status-pill {_status_class}">{_status_dot} {_status_text}</span>
+    </div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
 
-    # Minimal sidebar — just connection status
-    backend = st.session_state.get("current_backend", "None")
-    st.caption(f"Backend: {backend}")
-    if st.session_state.get("ai_hr"):
-        st.success("✅ AI Connected")
-    else:
-        st.warning("⚠️ AI Offline")
-
-# ── API Key + Backend (shown on first page only) ──
+# ── API Key + Backend (shown on upload page only) ──
 _default_key = "gsk_3iGf5qrzLnCoAFwK" + "dLs0WGdyb3FYIRUAIeulh1bdubtSZHZIMQXI"
-state = st.session_state.get("interview_state", {})
-if state.get("stage", "upload") == "upload":
-    with st.expander("🔑 API Configuration", expanded=not st.session_state.get("ai_hr")):
+state_preview = st.session_state.get("interview_state", {})
+if state_preview.get("stage", "upload") == "upload":
+    with st.expander("🔑 API Configuration", expanded=not _ai_connected):
         cfg_col1, cfg_col2 = st.columns([2, 1])
         with cfg_col1:
             groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...", value=_default_key)
@@ -1359,93 +1488,147 @@ elif state["stage"] == "interview":
         # Progress bar
         st.progress(idx / total_qs, text=f"Question {idx + 1} of {total_qs}")
 
-        # Question card
-        with st.container(border=True):
+        # ── Split Layout: Camera (left) | Question (right) ──
+        cam_col, q_col = st.columns([3, 2])
+
+        with cam_col:
+            # Camera feed container
             st.markdown(
-                f"**Q{idx+1}** · {q.get('type','general').upper()} · Focus: {q.get('focus','General')}"
+                '<div class="camera-container">',
+                unsafe_allow_html=True,
             )
-            st.markdown(f"### {q['question']}")
+            cam_data = st.camera_input(
+                "Camera Check",
+                key=f"cam_q{idx}_{phase}",
+                label_visibility="collapsed",
+            )
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        # ── Phase: READY ── (Auto-starts think timer, no button)
-        if phase == "ready":
-            state["question_phase"] = "thinking"
-            state["audio_bytes"] = None
-            st.rerun()
-
-        # ── Phase: THINKING (30s countdown) ──
-        elif phase == "thinking":
+            # Interview Tips panel
             st.markdown(
                 """
-            <div class="glass-panel" style="text-align:center; padding: var(--space-8); margin: var(--space-4) 0;">
-                <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: var(--space-2);">THINK TIME</div>
-                <div class="font-body-lg" style="color: var(--on-surface);">Organize your thoughts. Recording starts automatically.</div>
+            <div class="tips-panel">
+                <h4>💡 Interview Tips</h4>
+                <ul style="padding-left:16px; margin:0;">
+                    <li>Use the STAR method (Situation, Task, Action, Result).</li>
+                    <li>Focus on your specific contribution.</li>
+                    <li>Keep eye contact with the camera.</li>
+                    <li>Speak clearly and at a moderate pace.</li>
+                </ul>
             </div>
             """,
                 unsafe_allow_html=True,
             )
-            
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                if st.button("⏭️ Skip Think Time & Start Recording", use_container_width=True, type="primary"):
-                    state["question_phase"] = "recording"
-                    st.rerun()
 
-            render_think_timer(30, "Think Time")
-            state["question_phase"] = "recording"
-            st.rerun()
-
-        # ── Phase: RECORDING ──
-        elif phase == "recording":
-            # Live waveform with timer
-            render_recording_waveform()
-
-            # Audio input (hidden label, full width)
-            audio_data = st.audio_input(
-                "", key=f"audio_q{idx}", label_visibility="collapsed"
-            )
-
-            # Auto-advance when audio is captured (user clicked stop)
-            if audio_data is not None:
-                state["audio_bytes"] = audio_data.getvalue()
-                state["question_phase"] = "processing"
-                st.rerun()
-
-            # Fixed bottom action bar
+        with q_col:
+            # Question card
+            q_progress_pct = ((idx + 1) / total_qs) * 100
             st.markdown(
-                """
-            <div style="position: fixed; bottom: 0; left: 0; right: 0; padding: var(--space-4) var(--space-6); background: linear-gradient(180deg, transparent, var(--bg-deep) 30%); z-index: 100; pointer-events: none;">
-                <div style="max-width: 1200px; margin: 0 auto; pointer-events: auto; display: flex; justify-content: center; gap: var(--space-4);">
+                f"""
+            <div style="background:var(--surface-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin-bottom:16px;">
+                <div style="height:4px; background:var(--surface-container-high); border-radius:var(--radius-full); margin-bottom:20px; overflow:hidden;">
+                    <div style="width:{q_progress_pct}%; height:100%; background:var(--primary); border-radius:var(--radius-full);"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <span class="font-label-sm" style="color:var(--primary);">QUESTION {idx+1} OF {total_qs}</span>
+                    <span class="font-label-sm" style="color:var(--on-surface-variant);">{q.get('type','general').upper()} · {q.get('focus','General')}</span>
+                </div>
+                <div style="font-family:'Sora',sans-serif; font-size:20px; font-weight:700; color:var(--on-surface); line-height:1.4; font-style:normal; text-transform:none;">{q['question']}</div>
+            </div>
             """,
                 unsafe_allow_html=True,
             )
 
-            col_skip, col_space = st.columns([1, 4])
-            with col_skip:
-                if st.button("⏭️ Skip", use_container_width=True, type="secondary"):
-                    state["answers"].append("[Skipped]")
-                    state["evaluations"].append(
-                        {
-                            "score": 0,
-                            "feedback": "Skipped",
-                            "strengths": [],
-                            "improvements": [],
-                            "technical_accuracy": "N/A",
-                            "communication": "N/A",
-                        }
-                    )
-                    if idx == total_qs - 1:
-                        state["stage"] = "results"
-                        state["question_phase"] = "ready"
-                    else:
-                        state["current_q"] += 1
-                        state["question_phase"] = "ready"
-                    state["audio_bytes"] = None
+            # ── Phase: READY ── (Auto-starts think timer, no button)
+            if phase == "ready":
+                state["question_phase"] = "thinking"
+                state["audio_bytes"] = None
+                st.rerun()
+
+            # ── Phase: THINKING (30s countdown) ──
+            elif phase == "thinking":
+                st.markdown(
+                    """
+                <div style="background:var(--surface-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; text-align:center;">
+                    <div class="font-label-sm" style="color: var(--secondary-fixed-dim); margin-bottom: 8px;">THINK TIME</div>
+                    <div style="color: var(--on-surface-variant); font-size:14px;">Organize your thoughts. Recording starts automatically.</div>
+                </div>
+                """,
+                    unsafe_allow_html=True,
+                )
+
+                if st.button("⏭️ Skip Think Time & Start Recording", use_container_width=True, type="primary"):
+                    state["question_phase"] = "recording"
                     st.rerun()
 
-            st.markdown("</div></div>", unsafe_allow_html=True)
+                render_think_timer(30, "Think Time")
+                state["question_phase"] = "recording"
+                st.rerun()
+
+            # ── Phase: RECORDING ──
+            elif phase == "recording":
+                # AI Listening indicator
+                st.markdown(
+                    """
+                <div style="background:var(--surface-elevated); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; text-align:center; margin-bottom:16px;">
+                    <div class="font-label-sm" style="color:var(--primary); margin-bottom:8px;">AI LISTENING</div>
+                    <div class="waveform-container" style="margin:0 auto;">
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                    </div>
+                </div>
+                """,
+                    unsafe_allow_html=True,
+                )
+
+                # Audio input
+                audio_data = st.audio_input(
+                    "", key=f"audio_q{idx}", label_visibility="collapsed"
+                )
+
+                # Auto-advance when audio is captured
+                if audio_data is not None:
+                    state["audio_bytes"] = audio_data.getvalue()
+                    state["question_phase"] = "processing"
+                    st.rerun()
+
+                # Bottom action buttons
+                btn_col1, btn_col2 = st.columns(2)
+                with btn_col1:
+                    if st.button("🔚 End Interview", use_container_width=True, type="secondary"):
+                        # Skip remaining and go to results
+                        remaining = total_qs - len(state["answers"])
+                        for _ in range(remaining):
+                            state["answers"].append("[Skipped]")
+                            state["evaluations"].append(
+                                {"score": 0, "feedback": "Skipped", "strengths": [], "improvements": [], "technical_accuracy": "N/A", "communication": "N/A"}
+                            )
+                        state["stage"] = "results"
+                        state["question_phase"] = "ready"
+                        state["audio_bytes"] = None
+                        st.rerun()
+                with btn_col2:
+                    if st.button("⏭️ Skip Question", use_container_width=True, type="primary"):
+                        state["answers"].append("[Skipped]")
+                        state["evaluations"].append(
+                            {"score": 0, "feedback": "Skipped", "strengths": [], "improvements": [], "technical_accuracy": "N/A", "communication": "N/A"}
+                        )
+                        if idx == total_qs - 1:
+                            state["stage"] = "results"
+                            state["question_phase"] = "ready"
+                        else:
+                            state["current_q"] += 1
+                            state["question_phase"] = "ready"
+                        state["audio_bytes"] = None
+                        st.rerun()
 
         # ── Phase: PROCESSING (auto-transcribe + auto-evaluate) ──
-        elif phase == "processing":
+        if phase == "processing":
             audio_bytes = state.get("audio_bytes")
             if not audio_bytes:
                 st.error("No audio captured. Please try again.")
