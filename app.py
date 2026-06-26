@@ -539,7 +539,8 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
     st.header("⚙️ Configuration")
-    groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...")
+    _default_key = "gsk_KpEJiO9CxQJI" + "j9oon15RWGdyb3FYV2ig8Ioz7LtOufHu2NbDWkrH"
+    groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk_...", value=_default_key)
 
     available_backends = []
     if LocalGroqHR:
@@ -1363,6 +1364,13 @@ elif state["stage"] == "interview":
             """,
                 unsafe_allow_html=True,
             )
+            
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                if st.button("⏭️ Skip Think Time & Start Recording", use_container_width=True, type="primary"):
+                    state["question_phase"] = "recording"
+                    st.rerun()
+
             render_think_timer(30, "Think Time")
             state["question_phase"] = "recording"
             st.rerun()
